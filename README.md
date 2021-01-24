@@ -1,2 +1,2 @@
 # bar-app
-Team DJ-TAVR
+TEAM DJ-TAVR
