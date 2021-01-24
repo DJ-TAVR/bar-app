@@ -1,0 +1,195 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.white {
+  color: white;
+}
+
+.spaceTop {
+  margin-top: 25px;
+}
+
+.stuff {
+  background-color: #1f1f1f;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-header {
+  background-color: #1f1f1f;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.HelpButton {
+  /*display:block;*/
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  border: 2px solid purple;
+  background-color: midnightblue;
+  font-size: 30px;
+  color: white;
+  position: absolute;
+  left: 0%;
+  outline: none;
+}
+.BackAdminButton {
+  font-size: 25px;
+  width: 6em;
+  height: 3em;
+  color: white;
+  background-color: purple;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  outline: none;
+  position: absolute;
+  right: 0%;
+}
+
+.Inventory {
+  background-color: #1f1f1f;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid black;
+
+}
+
+.Drinks {
+  background-color: #1f1f1f;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid black;
+
+}
+
+.filterButton {
+  margin: 3%;
+  border: white;
+  width: 23%;
+  height: 4em;
+  font-size: medium;
+}
+
+.filterButton:hover {
+  background-color: purple;
+}
+
+.Table_Text {
+  color: white;
+  
+}
+.Pouring_Targets {
+  color: white;
+  font-size: 25px;
+}
+.Overpouring_Average {
+  color: white;
+  font-size: 25px;
+}
+
+
+.Table-header, td, th {
+  width: 80%;
+  border: 1px solid black;
+  align-items: center;
+  table-layout: fixed;
+  color: black;
+  background-color: mediumseagreen;
+  
+}
+
+.Table-header {
+  border-collapse: separate;
+  border: solid black 1px;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+}
+
+
+.App-link {
+  color: #61dafb;
+}
+
+h1 {
+  font-size: 300%;
+}
+
+.managerButton {
+  font-size: 50px;
+  width: 14em;
+  height: 2em;
+  color: white;
+  background-color: mediumseagreen;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  margin: 2%;
+  outline: none;
+}
+
+.rightmost {
+  float: right;
+}
+
+.bartenderButton {
+  font-size: 50px;
+  width: 14em;
+  height: 2em;
+  color: white;
+  background-color: mediumseagreen;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  margin: 2%;
+  outline: none;
+}
+
+.loginButton {
+  font-size: 50px;
+  width: 14em;
+  height: 2em;
+  color: white;
+  background-color: purple;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  margin: 2%;
+  outline: none;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
