@@ -18,7 +18,7 @@ def sign_in_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return render(request, 'index.html')
 
     return render(request, 'accounts/sign_in.html')
 
