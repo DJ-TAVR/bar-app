@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
 from . import forms
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 
 
 # Create your views here.
@@ -27,14 +28,16 @@ def sign_up_view(request):
     form = forms.CreateUserForm()
     # if request method is POST create new account 
     if request.method == 'POST':
-        user = form.save()
+        form = forms.CreateUserForm(request.POST) # create form object from submitted form
+        if form.is_valid():
+            user = form.save()
 
-        # below code user to a group (bartender or bar manager)
-        # group = Group.objects.get(name='')
-        # user.groups.add(group)
+            # below code user to a group (bartender or bar manager)
+            # group = Group.objects.get(name='')
+            # user.groups.add(group)
 
-        messages.success(request, 'Account is created for' + form.cleaned_data.get('username'))
-        return redirect('sign_in_view')
+            messages.success(request, 'Account is created for' + form.cleaned_data.get('username'))
+            return redirect('sign_in_view')
 
     context = {'form': form} # send object form to template
     return render(request, 'accounts/sign_up.html', context)

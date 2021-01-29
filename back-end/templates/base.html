@@ -9,9 +9,8 @@
     <link rel="stylesheet" href="{% static 'stylesheet/stylesheet.css' %}">
     <!-- bootstrap css-->
     <link rel="stylesheet" href="{% static 'stylesheet/custom_bootstrap.css' %}">
-    <!-- custom css -->
-    {% block stylesheet %}
-    {% endblock%}
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
 <body>
@@ -19,7 +18,7 @@
     {% block navbar %}
     {% endblock %}
     <!-- banner -->
-    <div class="banner {% block banner %} {% endblock %}">
+    <div class="banner {% block banner_style %} {% endblock %}">
         <div class="box-logo">
             <div class="logo-border">
                 <span><h1 class="text-white">Bar App</h1></span>
