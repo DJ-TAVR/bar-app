@@ -1,0 +1,33 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST" class="needs-validate">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control invalid" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="col-12 btn btn-primary">Submit</button>
+            
+            <div class="form-group mt-2">
+                <input id="remember" type="checkbox" name="is_remember">
+                <label for="remember">Remember me</label>
+            </div>
+        </form>
+        <div class="row"><span>Don't have an account? <a href="{% url 'sign_up_view' %}">Sign up here!</a></span></div>
+</div>
+
+{% endblock %}

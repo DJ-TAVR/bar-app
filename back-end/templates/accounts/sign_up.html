@@ -1,0 +1,58 @@
+{% extends '../base.html' %}
+{% block content %}
+<div class="container">
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="collection">
+      <div class="collection-item">
+          {{form.email.label}}
+          {{form.email}}
+          <div class="red-text text-darken-3">
+            {{form.email.errors}}
+          </div>
+      </div>
+      <div class="collection-item">
+          {{form.first_name.label}}
+          {{form.first_name}}
+          <div class="red-text text-darken-3">
+            {{form.first_name.errors}}
+          </div>
+
+      </div>
+      <div class="collection-item">
+          {{form.last_name.label}}
+          {{form.last_name}}
+          <div class="red-text text-darken-3">
+            {{form.last_name.errors}}
+          </div>
+
+      </div>
+      <div class="collection-item">
+          {{form.username.label}}
+          {{form.username}}
+          <div class="red-text text-darken-3">
+            {{form.username.errors}}
+          </div>
+
+      </div>
+      <div class="collection-item">
+          {{form.password1.label}}
+          {{form.password1}}
+          <div class="red-text text-darken-3">
+            {{form.password1.errors}}
+          </div>
+
+      </div>
+      <div class="collection-item">
+          {{form.password2.label}}
+          {{form.password2}}
+          <div class="red-text text-darken-3">
+            {{form.password2.errors}}
+          </div>
+
+      </div>
+    </div>
+    <input class="btn" type="submit" value="Register">
+  </form>
+</div>
+{% endblock %}
