@@ -29,12 +29,12 @@ def sign_up_view(request):
     # if request method is POST create new account 
     if request.method == 'POST':
         form = forms.CreateUserForm(request.POST) # create form object from submitted form
+        group_name = form.data['role']
         if form.is_valid():
             user = form.save()
-
             # below code user to a group (bartender or bar manager)
-            # group = Group.objects.get(name='')
-            # user.groups.add(group)
+            group = Group.objects.get(name=group_name)
+            user.groups.add(group)
 
             messages.success(request, 'Account is created for' + form.cleaned_data.get('username'))
             return redirect('sign_in_view')

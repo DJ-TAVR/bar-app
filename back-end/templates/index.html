@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+{% include 'navbar.html' %}
 {% endblock %}
 
 {% block content %}
+<div>
+        <h1>Welcome {{ request.user.groups.all.0}} {{request.user.last_name }} </h1> 
+</div>
 {% endblock %}
