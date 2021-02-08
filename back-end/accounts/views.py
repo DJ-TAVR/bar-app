@@ -6,7 +6,12 @@ from django.contrib import messages
 
 
 # Create your views here.
+### API using DRF
 
+
+
+
+### Pure django
 # view that process sign in request
 def sign_in_view(request):
     # if request method is POST perform authentication
