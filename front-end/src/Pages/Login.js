@@ -16,6 +16,7 @@ const useStyles = makeStyles({
 });
 
 export default function Login(props){
+    const [token,setToken] = useState(0);
 
     const classes = useStyles();
     return(
@@ -41,9 +42,24 @@ export default function Login(props){
         label="Password" />
         <div class = "spaceTop">
         <Link to = "/admin">
-                <Button className = "button bartenderButton">Login</Button>
+                <Button className = "button bartenderButton" onClick = {GetCSRF()}>Login</Button>
         </Link>
         </div>
         </div>
     )
 }
+
+
+  function GetCSRF() {
+    fetch("http://localhost:8000/api/csrf/", {
+      credentials: "include",
+    })
+    .then((res) => {
+      let csrfToken = res.headers.get("X-CSRFToken");
+      this.setToken({csrf: csrfToken});
+      alert(token);
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
