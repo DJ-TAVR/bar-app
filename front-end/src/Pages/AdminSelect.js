@@ -12,14 +12,14 @@ export default function AdminSelect(props){
                 <Button className = "BackAdminButton">Logout</Button>
             </Link>
             <header className="App-header">
-                <h1>Statistics</h1>
+                <h1>Dashboard</h1>
                 <div>
-                    <Link to = "/inventory">
-                        <Button className = "button managerButton">Bartender Insights</Button>
+                    <Link to = "/statistics">
+                        <Button className = "button managerButton">View Statistics</Button>
                     </Link>
 
-                    <Link to = "/drinks">
-                        <Button className = "button managerButton">Inventory Insights</Button>
+                    <Link to = "/admin">
+                        <Button className = "button managerButton">Manage Stickers</Button>
                     </Link>
                 </div>
             </header>
