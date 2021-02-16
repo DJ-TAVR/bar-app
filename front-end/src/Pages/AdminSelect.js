@@ -18,7 +18,7 @@ export default function AdminSelect(props){
                         <Button className = "button managerButton">View Statistics</Button>
                     </Link>
 
-                    <Link to = "/admin">
+                    <Link to = "/stickers">
                         <Button className = "button managerButton">Manage Stickers</Button>
                     </Link>
                 </div>
