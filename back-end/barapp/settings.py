@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # my apps
     'accounts',
     'barapp',
+    'stickers',
 ]
 
 REST_FRAMEWORK = {

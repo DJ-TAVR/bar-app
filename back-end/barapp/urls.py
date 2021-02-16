@@ -19,9 +19,11 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('accounts.urls')),
-    path('', include('accounts.urls')),
     path('csrf/', views.get_csrf, name='api-csrf'),
-    path('login/', views.login_view, name='api-login'),
-    path('logout/', views.logout_view, name='api-logout'),
-    path('session/', views.session_view, name='api-session')
+    # route to accounts app
+    path('login/', include('accounts.urls')),
+    path('logout/', include('accounts.urls')),
+    path('session/', include('accounts.urls')),
+    # route stickers app
+    path('sticker/', include('stickers.urls')),
 ]
