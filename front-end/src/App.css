@@ -106,16 +106,16 @@
   background-color: purple;
 }
 
-.tableButton {
-  margin: 3%;
-  border: mediumseagreen;
-  width: 23%;
-  height: 4em;
-  font-size: medium;
+.stickerElement:hover {
+  background-color: #6dce98;
 }
 
-.tableButton:hover {
-  background-color: purple;
+.nullStickerElement {
+  background-color: #7eb33c;
+}
+
+.nullStickerElement:hover {
+  background-color: #a3ce6d;
 }
 
 .Table_Text {
