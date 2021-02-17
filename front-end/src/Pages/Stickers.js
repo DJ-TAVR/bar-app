@@ -19,8 +19,8 @@ class Stickers extends React.Component {
         const save = function() {
             const previous = document.createElement(el.tagName.toLowerCase());
             previous.onClick = this.editData;
-            previous.className = "stickerElement";
-            previous.textContent = input.value;
+            previous.textContent = input.value.trim();
+            previous.className = previous.textContent ? "stickerElement": "nullStickerElement";
             input.replaceWith(previous);
         };
         input.addEventListener('blur', save, {
