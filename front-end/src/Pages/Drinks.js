@@ -8,7 +8,7 @@ export default function Inventory(props) {
     return(
         <div className="Drinks">
         <Button className = "HelpButton"> ? </Button>
-        <Link to = "/admin">
+        <Link to = "/statistics">
             <Button className = "BackAdminButton">Back to Statistics</Button>
         </Link>
         <h1 class = "Table_Text"> Inventory Insights </h1>
