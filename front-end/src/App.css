@@ -106,18 +106,6 @@
   background-color: purple;
 }
 
-.stickerElement:hover {
-  background-color: #6dce98;
-}
-
-.nullStickerElement {
-  background-color: #7eb33c;
-}
-
-.nullStickerElement:hover {
-  background-color: #a3ce6d;
-}
-
 .Table_Text {
   color: white;
 }
@@ -130,23 +118,93 @@
   font-size: 25px;
 }
 
-.Table-header,
-td,
-th {
-  width: 80%;
-  border: 1px solid black;
-  align-items: center;
-  table-layout: fixed;
-  color: black;
-  background-color: mediumseagreen;
+.StickerInput {
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #4dd88b;
+}
+
+/*Adapted from https://github.com/pablorgarcia*/
+
+.Table-header th h1 {
+  font-weight: bold;
+  font-size: 1em;
+  text-align: left;
+  color: #185875;
+}
+
+.Table-header td {
+  font-weight: normal;
+  font-size: 1em;
+  -webkit-box-shadow: 0 2px 2px -2px #0e1119;
+  -moz-box-shadow: 0 2px 2px -2px #0e1119;
+  box-shadow: 0 2px 2px -2px #0e1119;
 }
 
 .Table-header {
-  border-collapse: separate;
-  border: solid black 1px;
-  border-radius: 6px;
-  -moz-border-radius: 6px;
+  text-align: left;
+  overflow: hidden;
+  width: 80%;
+  margin: 0 auto;
+  display: table;
+  padding: 0 0 8em 0;
 }
+
+.Table-header td,
+.Table-header th {
+  padding-bottom: 2%;
+  padding-top: 2%;
+  padding-left: 2%;
+}
+
+.Table-header tr:nth-child(odd) {
+  background-color: #3c8b60;
+}
+
+.Table-header tr:nth-child(even) {
+  background-color: #289157;
+}
+
+.Table-header th {
+  background-color: #3fb875;
+}
+
+.Table-header tr:hover {
+  background-color: #207547;
+  -webkit-box-shadow: 0 6px 6px -6px #0e1119;
+  -moz-box-shadow: 0 6px 6px -6px #0e1119;
+  box-shadow: 0 6px 6px -6px #0e1119;
+}
+
+.StickerElement:empty {
+  background-color: #7eb33c;
+}
+
+.StickerElement:hover {
+  background-color: #fff842;
+  color: #403e10;
+  font-weight: bold;
+
+  box-shadow: #7f7c21 -1px 1px, #7f7c21 -2px 2px, #7f7c21 -3px 3px,
+    #7f7c21 -4px 4px, #7f7c21 -5px 5px, #7f7c21 -6px 6px;
+  transform: translate3d(6px, -6px, 0);
+
+  transition-delay: 0s;
+  transition-duration: 0.4s;
+  transition-property: all;
+  transition-timing-function: line;
+}
+
+@media (max-width: 800px) {
+  .container td:nth-child(4),
+  .container th:nth-child(4) {
+    display: none;
+  }
+}
+
+/*...*/
 
 .App-link {
   color: #61dafb;
