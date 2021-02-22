@@ -3,29 +3,46 @@ import React, {useState, useEffect} from "react";
 import Table from 'react-bootstrap/Table'
 import { Button } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
+
+var selector = 0;
 
 function editData(e) {
     const el = e.target;
     const index = Array.prototype.indexOf.call(el.parentNode.children, el);
     const th = document.querySelector('#stickers th:nth-child(' + (index+1) + ')');
+    selector += 1;
     if (!th.textContent.includes("Sticker ID")) {
-        const input = document.createElement("input");
-        input.setAttribute("value", el.textContent);
-        input.className = "StickerInput";
-        el.replaceWith(input);
-        const save = function() {
-            const previous = document.createElement(el.tagName.toLowerCase());
-            previous.onClick = {editData};
-            previous.textContent = input.value.trim();
-            previous.className = "StickerElement";
-            input.replaceWith(previous);
-        };
-        input.addEventListener('blur', save, {
-            once: true,
-        });
-        input.focus();
+        el.innerHTML = "<input class='StickerInput' id='n" + selector + "' value='" + el.textContent + "'> </input>";
+        document.getElementById("n"+selector).focus();
     }
+    document.getElementById("submitChanges").style.visibility = "visible";
+}
+
+function submit() {
+    const table = document.getElementById("stickers");
+    let newValues = []
+    selector = 0;
+    for (let i = 1, row; row = table.rows[i]; i++) {
+        let changes = []
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            if (col.firstChild.className == "StickerInput") {
+                changes.push(col.firstChild.value)
+                col.innerHTML = col.firstChild.value
+            } else {
+                changes.push(col.innerHTML)
+            }
+        }
+        newValues.push({
+            id: changes[0],
+            brand: changes[1],
+            type: changes[2],
+            mlpp: changes[3],
+            price: changes[4]
+        })
+    }
+    console.log(newValues);
+    document.getElementById("submitChanges").style.visibility = "hidden";
 }
 
 export default function Stickers(props) {
@@ -66,7 +83,7 @@ export default function Stickers(props) {
         headerGroups,
         rows,
         prepareRow,
-    } = useTable({ columns, data });
+    } = useTable({ columns, data }, useSortBy);
 
     return(
         <div className="Stickers">
@@ -83,7 +100,10 @@ export default function Stickers(props) {
                     headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}> {
                             headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps()}> {column.render('Header')} </th>
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())}> 
+                                    {column.render('Header')} 
+                                    {column.isSorted ? column.isSortedDesc ? '▲' : '▼': ''}
+                                </th>
                             ))}
                         </tr>
                     ))}
@@ -92,20 +112,21 @@ export default function Stickers(props) {
                     rows.map(row => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}> {
+                        <tr {...row.getRowProps()}> {
                                 row.cells.map(cell => {
-                                    return (<td {...cell.getCellProps()} 
-                                                className="StickerElement"
-                                                onClick={editData}> 
-                                                    {cell.render('Cell')} 
-                                            </td>
-                                        );
-                                })}
-                            </tr>
-                        )
+                                    return (
+                                        <td {...cell.getCellProps()} 
+                                                    className="StickerElement"
+                                                    onClick={editData}> 
+                                                        {cell.render('Cell')}
+                                        </td>
+                                    );
+                                })} 
+                        </tr>)
                     })}
                 </tbody>
             </Table>
+            <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button>
         </div>
     )
 }

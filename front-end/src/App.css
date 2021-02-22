@@ -123,7 +123,7 @@
   margin: 8px 0;
   box-sizing: border-box;
   border-radius: 4px;
-  background-color: #4dd88b;
+  background-color: #7eb33c;
 }
 
 /*Adapted from https://github.com/pablorgarcia*/
@@ -182,7 +182,7 @@
   background-color: #7eb33c;
 }
 
-.StickerElement:hover {
+.Table-header td:nth-child(n + 2).StickerElement:hover {
   background-color: #fff842;
   color: #403e10;
   font-weight: bold;
@@ -226,6 +226,10 @@ h1 {
   border-bottom-right-radius: 50px;
   margin: 2%;
   outline: none;
+}
+
+#submitChanges {
+  visibility: hidden;
 }
 
 .rightmost {
