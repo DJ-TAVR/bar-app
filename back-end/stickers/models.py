@@ -8,6 +8,7 @@ class Bar(models.Model):
     manager = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
 
 class Sticker(models.Model):
+    sticker_id = models.CharField(max_length=50, blank=True, null=False, unique=True, primary_key=True)
     drink_name = models.CharField(max_length=50, blank=True, null=True)
     drink_type = models.CharField(max_length=50, blank=True, null=True)
     drink_size = models.CharField(max_length=50, blank=True, null=True)
