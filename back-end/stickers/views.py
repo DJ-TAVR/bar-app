@@ -35,55 +35,43 @@ def create_sticker_view(request):
 @api_view(['GET', 'PUT'])
 def update_sticker_view(request):
     user = request.user
-    #if check_bar_manager_access(user):
-    if request.method == 'GET':
-        group = Group.objects.get(name='Bar Manager')
-        correct_bar = Bar.objects.get(manager = user)
-        stickers = Sticker.objects.filter(bar=correct_bar)
-        serialized_stickers = StickerSerializer(stickers, many = True)
-        return Response(serialized_stickers.data, status=200)
-        #return get_all_stickers(user)
-    elif request.method == 'PUT':
-        instance = Sticker.objects.values('sticker_id')
-        stickerInTable = 0
-        for i in range(len(instance)):
-            if instance[i]['sticker_id'] == request.data['sticker_id']:
-                stickerInTable = 1
+    if check_bar_manager_access(user):
+        if request.method == 'GET':
+            return get_all_stickers(user)
+        elif request.method == 'PUT':
+            instance = Sticker.objects.values('sticker_id')
+            stickerInTable = 0
+            for i in range(len(instance)):
+                if instance[i]['sticker_id'] == request.data['sticker_id']:
+                    stickerInTable = 1
+            if stickerInTable == 1:
+                object_to_update = Sticker.objects.get(pk = request.data['sticker_id'])
+                object_to_update.drink_name = request.data['drink_name']
+                object_to_update.drink_type = request.data['drink_type']
+                object_to_update.drink_size = request.data['drink_size']
+                object_to_update.price = request.data['price']
+                object_to_update.save()
 
-        if stickerInTable == 1:
-            object_to_update = Sticker.objects.get(pk = request.data['sticker_id'])
-            object_to_update.drink_name = request.data['drink_name']
-            object_to_update.drink_type = request.data['drink_type']
-            object_to_update.drink_size = request.data['drink_size']
-            object_to_update.price = request.data['price']
-            object_to_update.save()
-
-            return JsonResponse({'detail': 'Successfully Updated Sticker!'}, status = 200)
-        else:
-            return JsonResponse({'detail': 'Failed to Update Sticker'}, status = 400)
+                return JsonResponse({'detail': 'Successfully Updated Sticker!'}, status = 200)
+            else:
+                return JsonResponse({'detail': 'Failed to Update Sticker'}, status = 400)
         
     
 
 @api_view(['GET', 'POST'])
 def delete_sticker_view(request):
     user = request.user
-    #if check_bar_manager_access(user):
-    if request.method == 'GET':
-        group = Group.objects.get(name='Bar Manager')
-        correct_bar = Bar.objects.get(manager = user)
-        stickers = Sticker.objects.filter(bar=correct_bar)
-        serialized_stickers = StickerSerializer(stickers, many = True)
-        return Response(serialized_stickers.data, status=200)
-        #return get_all_stickers(user)
-
-    elif request.method == 'POST':
-        try:
-            currSticker = request.data["sticker_id"]
-            object_to_delete = Sticker.objects.get(pk = currSticker)
-            object_to_delete.delete()
-            return JsonResponse({'detail': 'Successfully Deleted Sticker!'}, status = 200)
-        except:
-            return JsonResponse({'detail': 'Failed to Delete Sticker'}, status = 400)
+    if check_bar_manager_access(user):
+        if request.method == 'GET':
+            return get_all_stickers(user)
+        elif request.method == 'POST':
+            try:
+                currSticker = request.data["sticker_id"]
+                object_to_delete = Sticker.objects.get(pk = currSticker)
+                object_to_delete.delete()
+                return JsonResponse({'detail': 'Successfully Deleted Sticker!'}, status = 200)
+            except:
+                return JsonResponse({'detail': 'Failed to Delete Sticker'}, status = 400)
 
 
 def get_all_stickers(user):
