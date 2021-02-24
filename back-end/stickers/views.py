@@ -22,13 +22,11 @@ def create_sticker_view(request):
         if request.method == 'GET':
             return get_all_stickers(user)
         elif request.method == 'POST':
-            form = StickerForm(request.data)
-            correct_bar = Bar.objects.get(manager = user)
-            if form.is_valid():
-                sticker_instance = form.save(commit=False)
-                sticker_instance.bar = correct_bar
-                sticker_instance.save()
-                form.save()
+            correct_bar = Bar.objects.get(manager=user)
+            serializer = StickerSerializer(data=request.data)
+            if serializer.is_valid():
+                instance = serializer.save(bar=correct_bar)
+                instance.save()
                 return JsonResponse({'detail': 'Successfully created stickers'}, status = 200)
             else:
                 return JsonResponse({'detail': 'Failed to create new sticker.'}, status = 400)
