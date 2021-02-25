@@ -28,6 +28,7 @@ function App() {
   .then((res) => {
       let csrfToken = res.headers.get("X-CSRFToken");
       setCSRFToken(csrfToken)
+      console.log(res)
   })
   .catch((err)=> {
       console.error(err)

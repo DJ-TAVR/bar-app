@@ -15,13 +15,19 @@ const useStyles = makeStyles({
     }
 });
 
+
 export default function Login(props){
+
+    const [user, setUser] = React.useState("");
+    const [pass, setPass] = React.useState("");
 
     const classes = useStyles();
     return(
         <div class="App-header">
         <h1> BarIQ </h1>
-        <TextField className = {classes.root}
+        <TextField
+        onChange = {(e) => {handleUser(e)}}
+        className = {classes.root}
         InputLabelProps = {{
             className: classes.input
         }}
@@ -29,7 +35,9 @@ export default function Login(props){
             className: classes.input
         }}
         label="Username" />
-        <TextField className = {classes.root}
+        <TextField
+        onChange = {(e) => {handlePass(e)}}
+        className = {classes.root}
         type = "password"
         InputLabelProps = {{
             className: classes.input
@@ -47,7 +55,27 @@ export default function Login(props){
         </div>
     )
 
+    function handleUser(e){
+        setUser(e.target.value)
+    }
+
+    function handlePass(e){
+        setPass(e.target.value)
+    }
     function loginButton(){
-        console.log(props.csrfToken)
+        fetch("http://localhost:8000/account/login/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": props.csrfToken ,
+            },
+            body: JSON.stringify({username: user, password: pass})
+        })
+        .then((res) => {
+            // console.log(props.csrfToken)
+            console.log(res)
+        })
+        .catch((err)=> {
+            console.error(err)
+        });
     }
 }
