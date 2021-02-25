@@ -41,9 +41,13 @@ export default function Login(props){
         label="Password" />
         <div class = "spaceTop">
         <Link to = "/admin">
-                <Button className = "button bartenderButton">Login</Button>
+                <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
         </Link>
         </div>
         </div>
     )
+
+    function loginButton(){
+        console.log(props.csrfToken)
+    }
 }

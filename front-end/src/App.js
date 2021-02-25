@@ -18,6 +18,21 @@ import Drinks from './Pages/Drinks';
 
 function App() {
   const [userType, setUserType] = React.useState("user");
+  const [csrfToken, setCSRFToken] = React.useState("");
+  const [isAuth, setIsAuth] = React.useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:8000/csrf/", {
+      credentials: "include",
+  })
+  .then((res) => {
+      let csrfToken = res.headers.get("X-CSRFToken");
+      setCSRFToken(csrfToken)
+  })
+  .catch((err)=> {
+      console.error(err)
+  });
+  }, [])
 
   function handleUserType(e) {
     setUserType(e)
@@ -30,7 +45,7 @@ function App() {
         <Registration userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path="/login">
-        <Login userType = {userType} handleUserType = {handleUserType}/>
+        <Login csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
 
       <Route path="/admin">
