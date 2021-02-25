@@ -9,4 +9,3 @@ urlpatterns = [
     path('update/', views.update_sticker_view, name = 'api-update-stickers'),
     
 ]
-]
