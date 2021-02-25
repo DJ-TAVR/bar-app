@@ -62,16 +62,33 @@ export default function Login(props){
     function handlePass(e){
         setPass(e.target.value)
     }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
     function loginButton(){
+        let csrf = getCookie('csrftoken');
         fetch("http://localhost:8000/account/login/", {
             method: "POST",
             headers: {
-                "X-CSRFToken": props.csrfToken ,
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({username: user, password: pass})
         })
         .then((res) => {
-            // console.log(props.csrfToken)
             console.log(res)
         })
         .catch((err)=> {

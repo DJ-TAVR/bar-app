@@ -64,7 +64,7 @@ function App() {
       </Route>
 
       <Route path = "/stickers">
-        <Stickers userType = {userType} handleUserType = {handleUserType}/>
+        <Stickers csrfToken = {csrfToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
 
       <Route path="/">

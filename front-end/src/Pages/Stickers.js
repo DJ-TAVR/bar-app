@@ -7,6 +7,22 @@ import { useTable, useSortBy } from 'react-table'
 
 var selector = 0;
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function editData(e) {
     const el = e.target;
     const index = Array.prototype.indexOf.call(el.parentNode.children, el);
@@ -20,8 +36,8 @@ function editData(e) {
 }
 
 function submit() {
+    let csrf = getCookie('csrftoken');
     const table = document.getElementById("stickers");
-    let newValues = []
     selector = 0;
     for (let i = 1, row; row = table.rows[i]; i++) {
         let changes = []
@@ -33,49 +49,59 @@ function submit() {
                 changes.push(col.innerHTML)
             }
         }
-        newValues.push({
-            id: changes[0],
-            brand: changes[1],
-            type: changes[2],
-            mlpp: changes[3],
-            price: changes[4]
+        fetch("http://localhost:8000/sticker/update/", {
+            method: "PUT",
+            headers: {
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            sticker_id: changes[0],
+            body: JSON.stringify({
+                sticker_id: changes[0],
+                drink_name: changes[1],
+                drink_type: changes[2],
+                drink_size: changes[3],
+                price: changes[4]
+            })
+        })
+        .then((res) => {
+            console.log(res)
         })
     }
-    console.log(newValues);
     document.getElementById("submitChanges").style.visibility = "hidden";
 }
 
 export default function Stickers(props) {
+    const [data, setData] = React.useState([]);
+
     const columns = React.useMemo(() => [{
         Header: "Sticker ID",
-        accessor: "id" 
+        accessor: "sticker_id" 
     }, {
         Header: "Brand",
-        accessor: "brand",
+        accessor: "drink_name",
     }, {
         Header: "Drink Type",
-        accessor: "type",
+        accessor: "drink_type",
     }, {
         Header: "MLPP (L)",
-        accessor: "mlpp",
+        accessor: "drink_size",
     }, {
         Header: "Price Per Liter (L)",
         accessor: "price",
     }], []);
 
-    let data = React.useMemo(() => [{
-        id: "NCC-1701",
-        brand: "Captain Morgan",
-        type: "rum",
-        mlpp: "3",
-        price: "5"
-    }, {
-        id: "NCC-1337",
-        brand: "",
-        type: "",
-        mlpp: "",
-        price: ""
-    }], []);
+    useEffect(() => {
+        let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/sticker/get/", {
+            headers: {
+                "X-CSRFToken": csrf ,
+            },
+            credentials: "include"
+        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => setData(obj.body));
+    }, []);
 
     let {
         getTableProps,
