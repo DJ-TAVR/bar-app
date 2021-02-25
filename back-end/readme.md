@@ -69,6 +69,37 @@ or
         "detail": "You are not log in."
     }
 
+### get all stickers
+127.0.0.1:8000/sticker/get/
+
+Returns all stickers inventory of the user's bar.
+
+Returns 400 if the user is not a bar manager.
+
+    {
+        'detail': 'Insufficient privilege.'
+    }
+
+### create stickers
+127.0.0.1:8000/sticker/create/
+
+Request body:
+
+    {
+        "sticker_id": "1234ABCD",
+        "drink_name": "drink_name_test1",
+        "drink_type": "drink_type_test1",
+        "drink_size": "3",
+        "price": "80.00"
+    }
+"bar" gets assigned dynamically to the bar that user manages.
+
+Returns 400 if the sticker fails to create.
+
+    {
+        'detail': 'Failed to create new sticker'
+    }
+
 ### note:
 - make sure to include csrftoken in the request's header like so
 
