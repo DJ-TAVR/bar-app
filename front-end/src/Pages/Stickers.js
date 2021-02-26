@@ -41,33 +41,37 @@ function submit() {
     selector = 0;
     for (let i = 1, row; row = table.rows[i]; i++) {
         let changes = []
+        let changeHappens = false;
         for (var j = 0, col; col = row.cells[j]; j++) {
             if (col.firstChild.className == "StickerInput") {
                 changes.push(col.firstChild.value)
                 col.innerHTML = col.firstChild.value
+                changeHappens = true;
             } else {
                 changes.push(col.innerHTML)
             }
         }
-        fetch("http://localhost:8000/sticker/update/", {
-            method: "PUT",
-            headers: {
-                "X-CSRFToken": csrf ,
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            sticker_id: changes[0],
-            body: JSON.stringify({
+        if (changeHappens) {
+            fetch("http://localhost:8000/sticker/update/", {
+                method: "PUT",
+                headers: {
+                    "X-CSRFToken": csrf ,
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
                 sticker_id: changes[0],
-                drink_name: changes[1],
-                drink_type: changes[2],
-                drink_size: changes[3],
-                price: changes[4]
+                body: JSON.stringify({
+                    sticker_id: changes[0],
+                    drink_name: changes[1],
+                    drink_type: changes[2],
+                    drink_size: changes[3],
+                    price: changes[4]
+                })
             })
-        })
-        .then((res) => {
-            console.log(res)
-        })
+            .then((res) => {
+                console.log(res)
+            })
+        }
     }
     document.getElementById("submitChanges").style.visibility = "hidden";
 }
