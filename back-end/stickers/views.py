@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.contrib.auth.models import Group
 from .models import Sticker, Bar
 from .serializers import StickerSerializer
@@ -8,14 +8,17 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 import json
 from .forms import StickerForm
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_stickers_view(request):
     return get_all_stickers(request.user)
     
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def create_sticker_view(request):
     user = request.user
     if check_bar_manager_access(user):
@@ -33,6 +36,7 @@ def create_sticker_view(request):
 
 
 @api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
 def update_sticker_view(request):
     user = request.user
     if check_bar_manager_access(user):
@@ -56,9 +60,8 @@ def update_sticker_view(request):
             else:
                 return JsonResponse({'detail': 'Failed to Update Sticker'}, status = 400)
         
-    
-
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def delete_sticker_view(request):
     user = request.user
     if check_bar_manager_access(user):

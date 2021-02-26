@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 urlpatterns = [
+    path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path('csrf/', views.get_csrf, name='api-csrf'),
     # route to accounts app

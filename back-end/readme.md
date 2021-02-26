@@ -28,6 +28,15 @@ Run below commands (make sure you at the back-end folder in terminal):
 
     credential: "include"
 
+### HTTP status code:
+200: success
+
+403: forbidden (don't have permission)
+
+405: method not allowed
+
+500: internal server error
+
 ### get csrf token
 127.0.0.1:8000/csrf/
 

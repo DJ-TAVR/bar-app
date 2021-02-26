@@ -25,3 +25,8 @@ read more here: https://docs.djangoproject.com/en/3.1/topics/migrations/
 brief: quick way to convert model to json, and convinient for valiadtion
 read more here: https://www.django-rest-framework.org/api-guide/serializers/
 
+# authentication
+read more here: https://www.django-rest-framework.org/api-guide/authentication/
+
+# permission
+read more hear: https://www.django-rest-framework.org/api-guide/permissions/
