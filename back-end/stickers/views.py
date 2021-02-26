@@ -93,33 +93,3 @@ def check_bar_manager_access(user):
     else:
         return JsonResponse({'detail': 'Insufficient privilege.'}, status = 400)
 
-def get_all_stickers(user):
-    if check_bar_manager_access(user):
-        correct_bar = Bar.objects.get(manager = user)
-        stickers = Sticker.objects.filter(bar=correct_bar)
-        serialized_stickers = StickerSerializer(stickers, many = True)
-        return Response(serialized_stickers.data, status=200)
-
-def check_bar_manager_access(user):
-    group = Group.objects.get(name='Bar Manager')
-    if group in user.groups.all():
-        return True
-    else:
-        return JsonResponse({'detail': 'Insufficient privilege.'}, status = 400)
-
-
-def get_all_stickers(user):
-    if check_bar_manager_access(user):
-        correct_bar = Bar.objects.get(manager = user)
-        stickers = Sticker.objects.filter(bar=correct_bar)
-        serialized_stickers = StickerSerializer(stickers, many = True)
-        return Response(serialized_stickers.data, status=200)
-
-def check_bar_manager_access(user):
-    group = Group.objects.get(name='Bar Manager')
-    if group in user.groups.all():
-        return True
-    else:
-        return JsonResponse({'detail': 'Insufficient privilege.'}, status = 400)
-
-
