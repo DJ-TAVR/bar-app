@@ -18,6 +18,15 @@
     $ python manage.py runserver
 
 ## Endpoints
+### note:
+- make sure to include csrftoken in the request's header like so
+
+    "X-CSRFToken": csrf_token_here
+
+- make sure to specify in fetch request
+
+    credential: "include"
+
 ### get csrf token
 127.0.0.1:8000/csrf/
 
@@ -69,11 +78,69 @@ or
         "detail": "You are not log in."
     }
 
-### note:
-- make sure to include csrftoken in the request's header like so
 
-    "X-CSRFToken": csrf_token_here
+### get all stickers
+method GET
+127.0.0.1:8000/sticker/get
 
-- make sure to specify in fetch request
+Return
+    {
+        [
+            {
+                "sticker_id": "sample_id",
+                "drink_name": "sample drink name",
+                "drink_type": "sample drink type",
+                "drink size": 12,
+                "price": 99.00
+            }, 
+            {
+                ... (second sticker here)
+            }
+        ]
+    }
+if HTTP_STATUS != 200: check for error message
 
-    credential: "include"
+# create sticker
+method POST
+127.0.0.1:8000/sticker/create
+
+Request body
+    {
+        {
+            "sticker_id": "sample_id",
+            "drink_name": "sample drink name",
+            "drink_type": "sample drink type",
+            "drink size": 12,
+            "price": 99.00
+        }
+    }
+
+if HTTP STATUS != 200, fail to create sticker
+
+# delete sticker
+method POST
+127.0.0.1:8000/sticker/delete
+
+Request body
+{
+    "sticker_id": "sample sticker id"
+}
+
+if HTTP STATUS != 200, fail to delete sticker
+
+# update sticker
+method PUT
+127.0.0.1:8000/sticker/update
+
+Request body
+{
+    {
+        "sticker_id": "sample_id",
+        "drink_name": "sample drink name",
+        "drink_type": "sample drink type",
+        "drink size": 12,
+        "price": 99.00
+    }
+}
+
+if HTTP STATUS != 200, fail to delete sticker
