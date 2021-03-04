@@ -14,7 +14,7 @@ export default function Statistics(props){
             <header className="App-header">
                 <h1>Statistics</h1>
                 <div>
-                    <Link to = "/inventory">
+                    <Link to = "/bartender">
                         <Button className = "button managerButton">Bartender Insights</Button>
                     </Link>
 

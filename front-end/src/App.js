@@ -13,7 +13,7 @@ import {
   Route,
 } from "react-router-dom";
 
-import Inventory  from './Pages/Inventory';
+import Bartender  from './Pages/Bartender';
 import Drinks from './Pages/Drinks';
 
 function App() {
@@ -56,8 +56,8 @@ function App() {
       <Route path="/statistics">
         <Statistics userType = {userType} handleUserType = {handleUserType}/>
       </Route>
-      <Route path="/inventory">
-        <Inventory userType = {userType} handleUserType = {handleUserType}/>
+      <Route path="/bartender">
+        <Bartender userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path = "/drinks">
         <Drinks userType = {userType} handleUserType = {handleUserType}/>
