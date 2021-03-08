@@ -5,20 +5,24 @@ import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import {Bar} from 'react-chartjs-2';
 
-const topOverpouring = {
-    labels: ['Shift 1', 'Shift 2', 'Shift 3'],
-    datasets: [
-      {
-        label: 'Number of Overpouring Instances',
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(0,0,0,1)',
-        borderWidth: 2,
-        data: [12, 10, 7],
-      }
-    ]
-  }
 
 export default function Bartender(props) {
+
+    const [data, setData] = useState([12, 10, 7]);
+
+    let topOverpouring = {
+        labels: ['Shift 1', 'Shift 2', 'Shift 3'],
+        datasets: [
+          {
+            label: 'Number of Overpouring Instances',
+            backgroundColor: 'rgba(75,192,192,1)',
+            borderColor: 'rgba(0,0,0,1)',
+            borderWidth: 2,
+            data: data,
+          }
+        ]
+    }
+
     return(
         <div className="Inventory">
             <Button className = "HelpButton"> ? </Button>
@@ -48,7 +52,10 @@ export default function Bartender(props) {
                     }
                 }}/>
             </div>
-            <Button className = "filterButton">Filters: 3/16/2018; Shift(9AM-12PM);...</Button>
+            {/* Demonstrating dynamic data changes, change when endpoints are done, of course. */}
+            <Button className = "filterButton" onClick={() => setData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
+                Filters: 3/16/2018; Shift(9AM-12PM);...
+            </Button>
             <Table className = "Table-header">
             <colgroup>
             <col className = "green"/>
