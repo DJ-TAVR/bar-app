@@ -14,3 +14,13 @@ class Sticker(models.Model):
     drink_size = models.CharField(max_length=50, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     bar = models.ForeignKey(Bar, related_name='stickers', on_delete=models.SET_NULL, null=True)
+    mlpp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+class Shift(models.Model):
+    bar = models.ForeignKey(Bar, related_name='shifts', on_delete=models.SET_NULL, null=True)
+    start_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    end_time = models.DateTimeField(auto_now=True, auto_now_add=False, null=True, blank=True)
+    total_mlpp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    average_mlpp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    target = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+

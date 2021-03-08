@@ -10,7 +10,7 @@ import json
 from .forms import StickerForm
 from rest_framework.permissions import IsAuthenticated
 
-# Create your views here.
+# Stickers 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_stickers_view(request):
@@ -96,3 +96,40 @@ def check_bar_manager_access(user):
     else:
         return JsonResponse({'detail': 'Insufficient privilege.'}, status = 400)
 
+# stat
+## helper functions
+def calculate_avg_MLPP(list_of_shifts):
+    return 0
+
+def calculate_cumulative_MLPP(list_of_shifts):
+    return 0
+
+def find_top3_shifts_MLPP(list_of_shifts):
+    return 0
+
+def calculate_over_pouring_percentage(list_of_shifts):
+    return 0
+
+def get_list_of_shifts(start_time, end_time):
+    # query shifts in between start-end
+    return []
+
+## endpoint
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def shifts_stats_view(request):
+    try:
+        # get input from request and database
+        start_time = request.data['start_time']
+        end_time = request.data['end_time']
+        list_of_shifts = get_list_of_shifts(start_time, end_time)
+
+        # construct response 
+        stats = {}
+        stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
+        stats['cumulative_mlpp'] = calculate_cumulative_MLPP(list_of_shifts)
+        stats['top3_MLPP'] = find_top3_shifts_MLPP(list_of_shifts)
+        stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
+        return Response(stats, status=200)
+    except:
+        return Response(None, status=400)
