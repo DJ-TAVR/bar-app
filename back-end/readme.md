@@ -177,3 +177,15 @@ Request body
 }
 
 if HTTP STATUS != 200, fail to delete sticker
+
+# get statistics of shifts
+method POST
+127.0.0.1:8000/sticker/shift_stats/
+
+Request body
+{
+    {
+        "start_time": "start_time_here"
+        "end_time": "end_time_here"
+    }
+}
