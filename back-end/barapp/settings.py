@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'barapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3'
+        'NAME': 'bar_app'
         # 'USER': 'djtavr',
         # 'PASSWORD': 'djtavr',
         # 'HOST': 'localhost',
