@@ -99,10 +99,20 @@ def check_bar_manager_access(user):
 # stat
 ## helper functions
 def calculate_avg_MLPP(list_of_shifts):
-    return 0
+    totalNumShifts = 0
+    totalAvgMLPP = 0
+    for shift in list_of_shifts:
+        totalNumShifts += 1
+        totalAvgMLPP += shift.average_mlpp
+    return totalAvgMLPP/totalNumShifts
 
 def calculate_cumulative_MLPP(list_of_shifts):
-    return 0
+    totalNumShifts = 0
+    totalCumulativeMLPP = 0
+    for shift in list_of_shifts:
+        totalNumShifts += 1
+        totalCumulativeMLPP += shift.cumulative_mlpp
+    return totalCumulativeMLPP/totalNumShifts
 
 def find_top3_shifts_MLPP(list_of_shifts):
     return 0
