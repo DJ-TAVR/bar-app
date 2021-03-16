@@ -105,31 +105,60 @@ def calculate_cumulative_MLPP(list_of_shifts):
     return 0
 
 def find_top3_shifts_MLPP(list_of_shifts):
-    return 0
+    limit = min(3, len(list_of_shifts))
+    dict = {}
+    for shift in list_of_shifts:
+        dict[shift.average_mlpp] = shift.average_mlpp / shift.target
+    return sorted(nlargest(limit, dict, key=dict.get), reverse=True)
+
 
 def calculate_over_pouring_percentage(list_of_shifts):
-    return 0
+    over_pouring_shift_count = 0
+    total_shifts_count = len(list_of_shifts)
+    for shift in list_of_shifts:
+        if (shift.average_mlpp / shift.target) > 1:
+            over_pouring_shift_count += 1
 
-def get_list_of_shifts(start_time, end_time):
-    # query shifts in between start-end
-    return []
+    return (over_pouring_shift_count / total_shifts_count) * 100
 
-## endpoint
-@api_view(['POST'])
+
+def get_list_of_shifts(request):
+    start_time = request.data['start_time']
+    end_time = request.data['end_time']
+    group = Group.objects.get(name='Bar Manager')
+    user = request.user
+    correct_bar = Bar.objects.get(manager=user)
+    shifts = []
+    filtered_shifts = []
+    if group in user.groups.all():
+        shifts = Shift.objects.filter(bar=correct_bar)
+    for shift in shifts:
+        if shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time and shift.end_time.strftime(
+                "%Y-%m-%d %H:%M:%S") <= end_time:
+            filtered_shifts.append(shift)
+    return filtered_shifts
+
+
+# endpoint
+@api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])
 def shifts_stats_view(request):
-    try:
-        # get input from request and database
-        start_time = request.data['start_time']
-        end_time = request.data['end_time']
-        list_of_shifts = get_list_of_shifts(start_time, end_time)
+    user = request.user
+    if check_bar_manager_access(user):
+        if request.method == 'GET':
+            # not sure what to put here
+            return get_all_stickers(user)
+        elif request.method == 'POST':
+            try:
+                list_of_shifts = get_list_of_shifts(request)
 
-        # construct response 
-        stats = {}
-        stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
-        stats['cumulative_mlpp'] = calculate_cumulative_MLPP(list_of_shifts)
-        stats['top3_MLPP'] = find_top3_shifts_MLPP(list_of_shifts)
-        stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
-        return Response(stats, status=200)
-    except:
-        return Response(None, status=400)
+                # construct response
+                stats = {}
+                stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
+                stats['cumulative_mlpp'] = calculate_cumulative_MLPP(list_of_shifts)
+                stats['top3_MLPP'] = find_top3_shifts_MLPP(list_of_shifts)
+                stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
+                print("this is stats,", stats)
+                return Response(stats, status=200)
+            except:
+                return Response(None, status=400)
