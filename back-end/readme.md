@@ -185,7 +185,7 @@ method POST
 Request body
 {
     {
-        "start_time": "start_time_here"
+        "start_time": "start_time_here",
         "end_time": "end_time_here"
     }
 }

@@ -15,13 +15,19 @@ const useStyles = makeStyles({
     }
 });
 
+
 export default function Login(props){
+
+    const [user, setUser] = React.useState("");
+    const [pass, setPass] = React.useState("");
 
     const classes = useStyles();
     return(
         <div class="App-header">
         <h1> BarIQ </h1>
-        <TextField className = {classes.root}
+        <TextField
+        onChange = {(e) => {handleUser(e)}}
+        className = {classes.root}
         InputLabelProps = {{
             className: classes.input
         }}
@@ -29,7 +35,9 @@ export default function Login(props){
             className: classes.input
         }}
         label="Username" />
-        <TextField className = {classes.root}
+        <TextField
+        onChange = {(e) => {handlePass(e)}}
+        className = {classes.root}
         type = "password"
         InputLabelProps = {{
             className: classes.input
@@ -41,9 +49,50 @@ export default function Login(props){
         label="Password" />
         <div class = "spaceTop">
         <Link to = "/admin">
-                <Button className = "button bartenderButton">Login</Button>
+                <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
         </Link>
         </div>
         </div>
     )
+
+    function handleUser(e){
+        setUser(e.target.value)
+    }
+
+    function handlePass(e){
+        setPass(e.target.value)
+    }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function loginButton(){
+        let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/account/login/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({username: user, password: pass})
+        })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err)=> {
+            console.error(err)
+        });
+    }
 }
