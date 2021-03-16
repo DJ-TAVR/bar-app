@@ -111,7 +111,7 @@ def calculate_cumulative_MLPP(list_of_shifts):
     totalCumulativeMLPP = 0
     for shift in list_of_shifts:
         totalNumShifts += 1
-        totalCumulativeMLPP += shift.cumulative_mlpp
+        totalCumulativeMLPP += shift.overpouring_count
     return totalCumulativeMLPP/totalNumShifts
 
 def find_top3_shifts_MLPP(list_of_shifts):
@@ -122,7 +122,15 @@ def calculate_over_pouring_percentage(list_of_shifts):
 
 def get_list_of_shifts(start_time, end_time):
     # query shifts in between start-end
-    return []
+    
+    print("Line 125")
+    startTimeVal = start_time
+    endTimeVal = end_time
+    print("startTimeVal " + str(startTimeVal))
+    print(Shift.objects.all().filter(start_time = startTimeVal, end_time = endTimeVal))
+    print(Shift.objects.all())
+
+    return Shift.objects.all()
 
 ## endpoint
 @api_view(['POST'])
@@ -130,9 +138,18 @@ def get_list_of_shifts(start_time, end_time):
 def shifts_stats_view(request):
     try:
         # get input from request and database
+        print("Line 133")
         start_time = request.data['start_time']
+        print("Works till line 134")
+        print(start_time)
         end_time = request.data['end_time']
+        print("Works till line 136")
+        print(end_time)
+        
         list_of_shifts = get_list_of_shifts(start_time, end_time)
+
+        print("Line 139!")
+        print(list_of_shifts)
 
         # construct response 
         stats = {}
