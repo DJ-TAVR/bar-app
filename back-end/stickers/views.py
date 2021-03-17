@@ -132,7 +132,7 @@ def calculate_over_pouring_percentage(list_of_shifts):
         if (shift.average_mlpp / shift.target) > 1:
             over_pouring_shift_count += 1
 
-    return (over_pouring_shift_count / total_shifts_count) * 100
+    return (over_pouring_shift_count / total_shifts_count) * 100 if total_shifts_count != 0 else 0
 
 
 def get_list_of_shifts(request):
