@@ -81,14 +81,16 @@ def delete_sticker_view(request):
 
 
 def get_all_stickers(user):
-    group = Group.objects.get(name='Bar Manager')
+    #group = Group.objects.get(name='Bar Manager')
     correct_bar = Bar.objects.get(manager=user)
-    if group in user.groups.all():
-        stickers = Sticker.objects.filter(bar=correct_bar)
-        serialized_stickers = StickerSerializer(stickers, many=True)
-        return Response(serialized_stickers.data, status=200)
+    #if group in user.groups.all():
+    stickers = Sticker.objects.filter(bar=correct_bar)
+    serialized_stickers = StickerSerializer(stickers, many=True)
+    return Response(serialized_stickers.data, status=200)
+    '''
     else:
         return JsonResponse({'detail': 'Insufficient privilege.'}, status=400)
+    '''
 
 
 def check_bar_manager_access(user):
@@ -102,11 +104,19 @@ def check_bar_manager_access(user):
 # stat
 ## helper functions
 def calculate_avg_MLPP(list_of_shifts):
-    return 0
+    totalNumShifts = 0
+    totalAvgMLPP = 0
+    for shift in list_of_shifts:
+        totalNumShifts += 1
+        totalAvgMLPP += shift.average_mlpp
+    return totalAvgMLPP/totalNumShifts
 
 
-def calculate_cumulative_MLPP(list_of_shifts):
-    return 0
+def calculate_cumulative_overpouring(list_of_shifts):
+    totalCumulativeMLPP = 0
+    for shift in list_of_shifts:
+        totalCumulativeMLPP += shift.overpouring_count
+    return totalCumulativeMLPP
 
 
 def find_top3_shifts_MLPP(list_of_shifts):
@@ -130,17 +140,25 @@ def calculate_over_pouring_percentage(list_of_shifts):
 def get_list_of_shifts(request):
     start_time = request.data['start_time']
     end_time = request.data['end_time']
-    group = Group.objects.get(name='Bar Manager')
+    #group = Group.objects.get(name='Bar Manager')
     user = request.user
     correct_bar = Bar.objects.get(manager=user)
     shifts = []
     filtered_shifts = []
-    if group in user.groups.all():
-        shifts = Shift.objects.filter(bar=correct_bar)
+    #if group in user.groups.all():
+    shifts = Shift.objects.filter(bar=correct_bar)
+    print("Line 152")
+    print(len(shifts))
     for shift in shifts:
+        print(shift.start_time.strftime("%Y-%m-%d %H:%M:%S"))
+        print("Line 154")
+        print(shift)
+        '''
         if shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time and shift.end_time.strftime(
                 "%Y-%m-%d %H:%M:%S") <= end_time:
-            filtered_shifts.append(shift)
+        '''
+        print("Line 162")
+        filtered_shifts.append(shift)
     return filtered_shifts
 
 
@@ -149,21 +167,23 @@ def get_list_of_shifts(request):
 @permission_classes([IsAuthenticated])
 def shifts_stats_view(request):
     user = request.user
-    if check_bar_manager_access(user):
-        if request.method == 'GET':
-            # not sure what to put here
-            return get_all_stickers(user)
-        elif request.method == 'POST':
-            try:
-                list_of_shifts = get_list_of_shifts(request)
-
-                # construct response
-                stats = {}
-                stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
-                stats['cumulative_mlpp'] = calculate_cumulative_MLPP(list_of_shifts)
-                stats['top3_MLPP'] = find_top3_shifts_MLPP(list_of_shifts)
-                stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
-                print("this is stats,", stats)
-                return Response(stats, status=200)
-            except:
-                return Response(None, status=400)
+    #if check_bar_manager_access(user):
+    if request.method == 'GET':
+        # not sure what to put here
+        return get_all_stickers(user)
+    elif request.method == 'POST':
+        try:
+            list_of_shifts = get_list_of_shifts(request)
+            print("Line 179")
+            # construct response
+            stats = {}
+            stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
+            print("Line 183")
+            stats['cumulative_mlpp'] = calculate_cumulative_overpouring(list_of_shifts)
+            print("Line 185")
+            stats['top3_MLPP'] = find_top3_shifts_MLPP(list_of_shifts)
+            stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
+            print("this is stats,", stats)
+            return Response(stats, status=200)
+        except:
+            return Response(None, status=400)
