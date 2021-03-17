@@ -1,7 +1,7 @@
-## Set up back-end:
+## Set up back-end: (first time)
 1. Install pipenv here https://pypi.org/project/pipenv/
 
-2. Run this command after install pipenv (make sure you at the back-end folder in terminal):
+2. Run below commands after install pipenv (make sure you at the back-end folder in terminal):
     
     $ pipenv install
     
@@ -9,37 +9,53 @@
     
     $ python manage.py makemigrations
     
-    $ python manage.py makemigrations todo_list
-    
     $ python manage.py migrate
     
     $ python manage.py createsuperuser (follow to step as you will be prompted create an admin account)
     
+## How to run server
+Run below commands (make sure you at the back-end folder in terminal):
+    $ pipenv shell
     $ python manage.py runserver
 
 ## Endpoints
+### note:
+- make sure to include csrftoken in the header of fetch request:
+
+    "X-CSRFToken": csrf_token_here
+
+- make sure to specify in the header of fetch request:
+
+    credential: "include"
+
+### HTTP status code:
+200: success
+
+403: forbidden (don't have permission)
+
+405: method not allowed
+
+500: internal server error
+
 ### get csrf token
 127.0.0.1:8000/csrf/
 
-- Description: this will set cookies contain the csrftoken to user's browser. 
+- Description: this will set cookies contain the csrftoken in user's browser. 
 
 ### check authenticate
-127.0.0.1:8000/session/
+127.0.0.1:8000/account/session/
 
 - Description: check if the current user is authenticated
 - Return: {'isAuthenticated': result}, result = True if request sent from authenticated user, and False vice versa.
 
 ### login
-127.0.0.1:8000/login/
+127.0.0.1:8000/account/login/
 
 Body request
-    
+
     {
-
         "username": user_name_here,
-
         "password": password_here
-
     }
 
 Return
@@ -92,19 +108,84 @@ Request body:
         "drink_size": "3",
         "price": "80.00"
     }
-"bar" gets assigned dynamically to the bar that user manages.
 
-Returns 400 if the sticker fails to create.
+if HTTP_STATUS != 200: check for error message
 
+### get all stickers
+method GET
+127.0.0.1:8000/sticker/get
+
+Return
     {
-        'detail': 'Failed to create new sticker'
+        [
+            {
+                "sticker_id": "sample_id",
+                "drink_name": "sample drink name",
+                "drink_type": "sample drink type",
+                "drink size": 12,
+                "price": 99.00
+            }, 
+            {
+                ... (second sticker here)
+            }
+        ]
+    }
+    
+if HTTP_STATUS != 200: check for error message
+
+# create sticker
+method POST
+127.0.0.1:8000/sticker/create
+
+Request body
+    {
+        {
+            "sticker_id": "sample_id",
+            "drink_name": "sample drink name",
+            "drink_type": "sample drink type",
+            "drink size": 12,
+            "price": 99.00
+        }
     }
 
-### note:
-- make sure to include csrftoken in the request's header like so
+if HTTP STATUS != 200, fail to create sticker
 
-    "X-CSRFToken": csrf_token_here
+# delete sticker
+method POST
+127.0.0.1:8000/sticker/delete
 
-- make sure to specify in fetch request
+Request body
+{
+    "sticker_id": "sample sticker id"
+}
 
-    credential: "include"
+if HTTP STATUS != 200, fail to delete sticker
+
+# update sticker
+method PUT
+127.0.0.1:8000/sticker/update
+
+Request body
+{
+    {
+        "sticker_id": "sample_id",
+        "drink_name": "sample drink name",
+        "drink_type": "sample drink type",
+        "drink size": 12,
+        "price": 99.00
+    }
+}
+
+if HTTP STATUS != 200, fail to delete sticker
+
+# get statistics of shifts
+method POST
+127.0.0.1:8000/sticker/shift_stats/
+
+Request body
+{
+    {
+        "start_time": "start_time_here",
+        "end_time": "end_time_here"
+    }
+}

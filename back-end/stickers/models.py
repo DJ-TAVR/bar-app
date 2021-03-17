@@ -14,3 +14,16 @@ class Sticker(models.Model):
     drink_size = models.CharField(max_length=50, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     bar = models.ForeignKey(Bar, related_name='stickers', on_delete=models.SET_NULL, null=True)
+    mlpp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+class Shift(models.Model):
+    bar = models.ForeignKey(Bar, related_name='shifts', on_delete=models.SET_NULL, null=True)
+    # begin the shift
+    start_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    target = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    bartenders = models.ManyToManyField(User, related_name='bartenders')
+    # end shift
+    end_time = models.DateTimeField(auto_now=True, auto_now_add=False, null=True, blank=True)
+    average_mlpp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # average mlpp from all stickers
+    overpouring_count = models.IntegerField(blank=True, null=True) # increase any time the overpour signal sent from sticker
+
