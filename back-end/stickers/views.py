@@ -107,7 +107,7 @@ def calculate_avg_MLPP(list_of_shifts):
     for shift in list_of_shifts:
         totalNumShifts += 1
         totalAvgMLPP += shift.average_mlpp
-    return totalAvgMLPP/totalNumShifts
+    return totalAvgMLPP/totalNumShifts if totalNumShifts != 0 else 0
 
 
 def calculate_cumulative_overpouring(list_of_shifts):
@@ -153,7 +153,7 @@ def get_list_of_shifts(request):
 
 
 # endpoint
-@api_view(['POST', 'GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def shifts_stats_view(request):
     user = request.user
@@ -164,7 +164,6 @@ def shifts_stats_view(request):
         elif request.method == 'POST':
             try:
                 list_of_shifts = get_list_of_shifts(request)
-
                 # construct response
                 stats = {}
                 stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
