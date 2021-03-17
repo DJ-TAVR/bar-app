@@ -110,7 +110,7 @@ def calculate_avg_MLPP(list_of_shifts):
     return totalAvgMLPP/totalNumShifts
 
 
-def calculate_cumulative_MLPP(list_of_shifts):
+def calculate_cumulative_overpouring(list_of_shifts):
     totalCumulativeMLPP = 0
     for shift in list_of_shifts:
         totalCumulativeMLPP += shift.overpouring_count
@@ -168,7 +168,7 @@ def shifts_stats_view(request):
                 # construct response
                 stats = {}
                 stats['average_mlpp'] = calculate_avg_MLPP(list_of_shifts)
-                stats['cumulative_mlpp'] = calculate_cumulative_MLPP(list_of_shifts)
+                stats['cumulative_mlpp'] = calculate_cumulative_overpouring(list_of_shifts)
                 stats['top3_MLPP'] = find_top3_shifts_MLPP(list_of_shifts)
                 stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
                 print("this is stats,", stats)
