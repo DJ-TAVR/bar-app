@@ -180,7 +180,7 @@ if HTTP STATUS != 200, fail to delete sticker
 
 # get statistics of shifts
 method POST
-127.0.0.1:8000/sticker/shift_stats/
+127.0.0.1:8000/sticker/shifts_stats/
 
 Request body
 {
@@ -188,4 +188,18 @@ Request body
         "start_time": "start_time_here",
         "end_time": "end_time_here"
     }
+}
+
+sample result:
+{
+    "average_mlpp": 200.0,
+    "cumulative_mlpp": 3,
+    "top3_MLPP": [
+        {
+            "start_time": "2021-03-16 02:00:15",
+            "end_time": "2021-03-18 22:01:04",
+            "percentage_overpour": 2.0
+        }
+    ],
+    "over_pouring_percentage": 100.0
 }
