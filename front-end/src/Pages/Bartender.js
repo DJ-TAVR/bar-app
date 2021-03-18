@@ -3,13 +3,28 @@ import React, {useState, useEffect} from "react";
 import Table from 'react-bootstrap/Table'
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
-import {Bar} from 'react-chartjs-2';
+import {Bar, Doughnut} from 'react-chartjs-2';
 import { useTable, useSortBy } from 'react-table'
 
 
 export default function Bartender(props) {
 
-    const [data, setData] = useState({average_mlpp:5, cumulative_mlpp:0, top3_MLPP:[0, 0, 0], over_pouring_percentage: 0 });
+    const [chartData, setChartData] = React.useState({average_mlpp:5, cumulative_mlpp:0, top3_MLPP:[0, 0, 0], over_pouring_percentage: 5 });
+    const [tableData, setTableData] = React.useState([]);
+
+    const columns = React.useMemo(() => [{
+        Header: "Shift",
+        accessor: "shift" 
+    }, {
+        Header: "Bartenders Present",
+        accessor: "bartenders",
+    }, {
+        Header: "Liters Overpoured",
+        accessor: "liters",
+    }, {
+        Header: "Amount of Overpouring Instances",
+        accessor: "instances",
+    }], []);
 
     let topOverpouring = {
         labels: ['Shift 1', 'Shift 2', 'Shift 3'],
@@ -19,14 +34,24 @@ export default function Bartender(props) {
             backgroundColor: 'rgba(75,192,192,1)',
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
-            data: data.top3_MLPP,
+            data: chartData.top3_MLPP,
           }
         ]
     }
 
-    let averageDifference = data.average_mlpp;
-    let cumulativePoursAbove = data.cumulative_mlpp;
-    let overpourPercent = data.over_pouring_percentage;
+    let overpourPercent = {
+        labels: ["Percentage of Pours that are Overpours", "Percentage of Pours that are Non-overpours"],
+        datasets: [
+            {
+                data: [chartData.over_pouring_percentage, 100 - chartData.over_pouring_percentage],
+                backgroundColor: ['rgba(255,0,0,1)', 'rgba(0,255,0,1)'],
+            }
+        ]
+
+    }
+
+    let averageDifference = chartData.average_mlpp;
+    let cumulativePoursAbove = chartData.cumulative_mlpp;
 
     function getCookie(name) {
         let cookieValue = null;
@@ -45,7 +70,7 @@ export default function Bartender(props) {
     }
 
     // Doesn't currently work
-    function updateData() {
+    function updateChartData() {
         let csrf = getCookie('csrftoken');
         fetch("http://localhost:8000/sticker/shifts_stats/", {
             method: "POST",
@@ -59,7 +84,24 @@ export default function Bartender(props) {
                 end_time: "2021-03-17 08:00:00"
             })
         }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
-        .then(obj => console.log(obj.body));
+        .then(obj => setChartData(obj.body));
+    }
+
+    function updateTableData() {
+        setTableData([
+            {
+                shift: "2021/11/15 5:00:00",
+                bartenders: "John Ego, Bill Paxton",
+                liters: "10",
+                instances: "5"
+            },
+            {
+                shift: "2021/11/15 18:00:00",
+                bartenders: "William Billiam, Silly Sam",
+                liters: "20",
+                instances: "1"
+            }
+        ]);
     }
 
     function colorMapper(input, max) {
@@ -69,12 +111,23 @@ export default function Bartender(props) {
     }
 
     useEffect(() => {
-        updateData();
+        updateChartData();
     }, []);
+
+    useEffect(() => {
+        updateTableData();
+    }, []);
+
+    let {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable({ columns, data: tableData }, useSortBy);
 
     let colorAvg = colorMapper(Math.abs(averageDifference), 5);
     let colorCum = colorMapper(cumulativePoursAbove, 10);
-    let colorPer = colorMapper(overpourPercent, 100);
 
     return(
         <div className="Inventory">
@@ -84,7 +137,7 @@ export default function Bartender(props) {
             </Link>
             <h1 className = "Table_Text"> Bartender Insights </h1>
             {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
-            <Button className = "filterButton" onClick={() => setData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
+            <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
                 Filters: 3/16/2018; Shift(9AM-12PM);...
             </Button>
             <div className="Grid">
@@ -108,6 +161,19 @@ export default function Bartender(props) {
                         }]
                     }
                 }}/>
+                <Doughnut className ="Chart"
+                data={overpourPercent} 
+                options={{
+                    title:{
+                        display:true,
+                        text: "Percentage of Overpours",
+                        fontSize:20,
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }}/>
                 <div className="Statistic">
                     <p className="StatHeader">Average Difference Between Pours and MLPP</p>
                     <p className="StatElement" style={{color: colorAvg}}>{averageDifference}</p>
@@ -116,11 +182,37 @@ export default function Bartender(props) {
                     <p className="StatHeader">Cumulative Instances of Overpouring</p>
                     <p className="StatElement" style={{color: colorCum}}>{cumulativePoursAbove}</p>
                 </div>
-                <div className="Statistic">
-                    <p className="StatHeader">Percentage of Pours Over MLPP</p>
-                    <p className="StatElement" style={{color: colorPer}}>{overpourPercent}%</p>
-                </div>
             </div>
+            <Table {...getTableProps()} className = "Table-header">
+                <colgroup>
+                    <col class = "green"/>
+                </colgroup>
+                <thead> {
+                    headerGroups.map(headerGroup => (
+                        <tr {...headerGroup.getHeaderGroupProps()}> {
+                            headerGroup.headers.map(column => (
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())}> 
+                                    {column.render('Header')} 
+                                    {column.isSorted ? column.isSortedDesc ? '▲' : '▼': ''}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody {...getTableBodyProps()}> {
+                    rows.map(row => {
+                        prepareRow(row);
+                        return (
+                        <tr {...row.getRowProps()}> {
+                                row.cells.map(cell => {
+                                    return (
+                                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    );
+                                })} 
+                        </tr>)
+                    })}
+                </tbody>
+            </Table>
         </div>
     )
 }
