@@ -10,13 +10,13 @@ import { useTable, useSortBy } from 'react-table'
 export default function Bartender(props) {
 
     const [chartData, setChartData] = React.useState({
-        average_mlpp:5, 
-        cumulative_mlpp:0, 
+        average_mlpp:5,
+        cumulative_mlpp:0,
         top3_MLPP:[{
             start_time: "2021/11/15 5:00:00",
             end_time: "2021/11/15 9:00:00",
             percentage_overpour: 5
-        }, 
+        },
         {
             start_time: "2021/11/15 9:00:00",
             end_time: "2021/11/15 10:00:00",
@@ -26,25 +26,16 @@ export default function Bartender(props) {
             start_time: "2021/12/15 5:00:00",
             end_time: "2021/12/15 9:00:00",
             percentage_overpour: 1
-        }], 
+        }],
         over_pouring_percentage: 5 });
     const [tableData, setTableData] = React.useState([]);
 
-    let timeRanges = [];
-    let topOverpours = [];
-
-    for (let data of chartData.top3_MLPP) {
-        let timeRange = data.start_time + " - " + data.percentage_overpour;
-        timeRanges.push(timeRange);
-        topOverpours.push(data.percentage_overpour);
-    }
-
     const columns = React.useMemo(() => [{
         Header: "Shift Start",
-        accessor: "startTime" 
+        accessor: "startTime"
     }, {
         Header: "Shift End",
-        accessor: "endTime" 
+        accessor: "endTime"
     }, {
         Header: "Bartenders Present",
         accessor: "bartenders",
@@ -55,6 +46,15 @@ export default function Bartender(props) {
         Header: "Amount of Overpouring Instances",
         accessor: "instances",
     }], []);
+
+    let timeRanges = [];
+    let topOverpours = [];
+
+    for (let data of chartData.top3_MLPP) {
+        let timeRange = data.start_time + " - " + data.percentage_overpour;
+        timeRanges.push(timeRange);
+        topOverpours.push(data.percentage_overpour);
+    }
 
     let topOverpouring = {
         labels: timeRanges,
@@ -174,7 +174,7 @@ export default function Bartender(props) {
             </Button>
             <div className="Grid">
                 <Bar className ="Chart"
-                data={topOverpouring} 
+                data={topOverpouring}
                 options={{
                     title:{
                         display:true,
@@ -194,7 +194,7 @@ export default function Bartender(props) {
                     }
                 }}/>
                 <Doughnut className ="Chart"
-                data={overpourPercent} 
+                data={overpourPercent}
                 options={{
                     title:{
                         display:true,
@@ -223,8 +223,8 @@ export default function Bartender(props) {
                     headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}> {
                             headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}> 
-                                    {column.render('Header')} 
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                    {column.render('Header')}
                                     {column.isSorted ? column.isSortedDesc ? '▲' : '▼': ''}
                                 </th>
                             ))}
@@ -240,7 +240,7 @@ export default function Bartender(props) {
                                     return (
                                         <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                                     );
-                                })} 
+                                })}
                         </tr>)
                     })}
                 </tbody>
