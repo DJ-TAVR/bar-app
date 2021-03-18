@@ -264,23 +264,6 @@ h1 {
   outline: none;
 }
 
-.Grid {
-  position: relative;
-  display: grid;
-  grid-gap: 2vw;
-  grid-template-columns: repeat(3, 1fr);
-  justify-items: center;
-  align-items: center;
-  width: 500px;
-  height: 500px;
-}
-
-.Chart {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -288,4 +271,45 @@ h1 {
   to {
     transform: rotate(360deg);
   }
+}
+
+.Grid {
+  display: grid;
+  grid-gap: 3vw;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  align-items: center;
+  width: 500px;
+  height: 500px;
+  margin-left: -500px;
+}
+
+.Chart {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  margin-right: 5vw;
+}
+
+.Statistic {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  max-width: 1000px;
+  margin: auto;
+  margin-left: 5vw;
+  margin-bottom: 150px;
+}
+
+.StatHeader {
+  font-size: 1vw;
+  text-align: center;
+  color: white;
+}
+
+.StatElement {
+  font-size: 5vw;
+  color: white;
+  margin-top: -1vw;
+  margin-bottom: -0.5vw;
 }

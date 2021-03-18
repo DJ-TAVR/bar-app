@@ -4,11 +4,12 @@ import Table from 'react-bootstrap/Table'
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import {Bar} from 'react-chartjs-2';
+import { useTable, useSortBy } from 'react-table'
 
 
 export default function Bartender(props) {
 
-    const [data, setData] = useState([12, 10, 7]);
+    const [data, setData] = useState({average_mlpp:5, cumulative_mlpp:0, top3_MLPP:[0, 0, 0], over_pouring_percentage: 0 });
 
     let topOverpouring = {
         labels: ['Shift 1', 'Shift 2', 'Shift 3'],
@@ -18,10 +19,62 @@ export default function Bartender(props) {
             backgroundColor: 'rgba(75,192,192,1)',
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
-            data: data,
+            data: data.top3_MLPP,
           }
         ]
     }
+
+    let averageDifference = data.average_mlpp;
+    let cumulativePoursAbove = data.cumulative_mlpp;
+    let overpourPercent = data.over_pouring_percentage;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Doesn't currently work
+    function updateData() {
+        let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/sticker/shifts_stats/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                start_time: "2021-03-15 02:00:00", //change these based on filter input
+                end_time: "2021-03-17 08:00:00"
+            })
+        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => console.log(obj.body));
+    }
+
+    function colorMapper(input, max) {
+        input = Math.min(input, max);
+        let redness = 255 - ((255 / max) * input);
+        return "rgb(255, " + redness + ", " +  redness + ")";
+    }
+
+    useEffect(() => {
+        updateData();
+    }, []);
+
+    let colorAvg = colorMapper(Math.abs(averageDifference), 5);
+    let colorCum = colorMapper(cumulativePoursAbove, 10);
+    let colorPer = colorMapper(overpourPercent, 100);
 
     return(
         <div className="Inventory">
@@ -30,6 +83,10 @@ export default function Bartender(props) {
                 <Button className = "BackAdminButton">Back to Statistics</Button>
             </Link>
             <h1 className = "Table_Text"> Bartender Insights </h1>
+            {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
+            <Button className = "filterButton" onClick={() => setData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
+                Filters: 3/16/2018; Shift(9AM-12PM);...
+            </Button>
             <div className="Grid">
                 <Bar className ="Chart"
                 data={topOverpouring} 
@@ -51,86 +108,19 @@ export default function Bartender(props) {
                         }]
                     }
                 }}/>
+                <div className="Statistic">
+                    <p className="StatHeader">Average Difference Between Pours and MLPP</p>
+                    <p className="StatElement" style={{color: colorAvg}}>{averageDifference}</p>
+                </div>
+                <div className="Statistic">
+                    <p className="StatHeader">Cumulative Instances of Overpouring</p>
+                    <p className="StatElement" style={{color: colorCum}}>{cumulativePoursAbove}</p>
+                </div>
+                <div className="Statistic">
+                    <p className="StatHeader">Percentage of Pours Over MLPP</p>
+                    <p className="StatElement" style={{color: colorPer}}>{overpourPercent}%</p>
+                </div>
             </div>
-            {/* Demonstrating dynamic data changes, change when endpoints are done, of course. */}
-            <Button className = "filterButton" onClick={() => setData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
-                Filters: 3/16/2018; Shift(9AM-12PM);...
-            </Button>
-            <Table className = "Table-header">
-            <colgroup>
-            <col className = "green"/>
-            </colgroup>
-            <thead>
-                <tr>
-                <th>Employee Name</th>
-                <th>Amount Poured(L)</th>
-                <th>Amount Required(L)</th>
-                <th>Overpoured(L)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                
-                <td>John Doe</td>
-                <td>9</td>
-                <td>6</td>
-                <td>3</td>
-                </tr>
-                
-                
-                <tr>
-                <td>Jane Doe</td>
-                <td>7</td>
-                <td>6</td>
-                <td>1</td>
-                </tr>
-
-                <tr>
-                <td>Toph Beifong</td>
-                <td>12</td>
-                <td>7</td>
-                <td>5</td>
-                </tr>
-
-                <tr>
-                <td>Katara</td>
-                <td>10</td>
-                <td>10</td>
-                <td>0</td>
-                </tr>
-                
-                <tr>
-                <td>Zuko</td>
-                <td>11</td>
-                <td>9</td>
-                <td>2</td>
-                </tr>
-
-                <tr>
-                <td>Aang</td>
-                <td>6</td>
-                <td>4</td>
-                <td>2</td>
-                </tr>
-
-                <tr>
-                <td>Sokka</td>
-                <td>13</td>
-                <td>10</td>
-                <td>3</td>
-                </tr>
-
-                <tr>
-                <td>Suki</td>
-                <td>8</td>
-                <td>7</td>
-                <td>1</td>
-                </tr>
-
-
-            </tbody>
-            </Table>
-        
         </div>
     )
 }
