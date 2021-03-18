@@ -9,12 +9,42 @@ import { useTable, useSortBy } from 'react-table'
 
 export default function Bartender(props) {
 
-    const [chartData, setChartData] = React.useState({average_mlpp:5, cumulative_mlpp:0, top3_MLPP:[0, 0, 0], over_pouring_percentage: 5 });
+    const [chartData, setChartData] = React.useState({
+        average_mlpp:5, 
+        cumulative_mlpp:0, 
+        top3_MLPP:[{
+            start_time: "2021/11/15 5:00:00",
+            end_time: "2021/11/15 9:00:00",
+            percentage_overpour: 5
+        }, 
+        {
+            start_time: "2021/11/15 9:00:00",
+            end_time: "2021/11/15 10:00:00",
+            percentage_overpour: 2
+        },
+        {
+            start_time: "2021/12/15 5:00:00",
+            end_time: "2021/12/15 9:00:00",
+            percentage_overpour: 1
+        }], 
+        over_pouring_percentage: 5 });
     const [tableData, setTableData] = React.useState([]);
 
+    let timeRanges = [];
+    let topOverpours = [];
+
+    for (let data of chartData.top3_MLPP) {
+        let timeRange = data.start_time + " - " + data.percentage_overpour;
+        timeRanges.push(timeRange);
+        topOverpours.push(data.percentage_overpour);
+    }
+
     const columns = React.useMemo(() => [{
-        Header: "Shift",
-        accessor: "shift" 
+        Header: "Shift Start",
+        accessor: "startTime" 
+    }, {
+        Header: "Shift End",
+        accessor: "endTime" 
     }, {
         Header: "Bartenders Present",
         accessor: "bartenders",
@@ -27,14 +57,14 @@ export default function Bartender(props) {
     }], []);
 
     let topOverpouring = {
-        labels: ['Shift 1', 'Shift 2', 'Shift 3'],
+        labels: timeRanges,
         datasets: [
           {
             label: 'Number of Overpouring Instances',
             backgroundColor: 'rgba(75,192,192,1)',
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
-            data: chartData.top3_MLPP,
+            data: topOverpours,
           }
         ]
     }
@@ -90,13 +120,15 @@ export default function Bartender(props) {
     function updateTableData() {
         setTableData([
             {
-                shift: "2021/11/15 5:00:00",
+                startTime: "2021/11/15 5:00:00",
+                endTime: "2021/11/15 7:00:00",
                 bartenders: "John Ego, Bill Paxton",
                 liters: "10",
                 instances: "5"
             },
             {
-                shift: "2021/11/15 18:00:00",
+                startTime: "2021/11/15 18:00:00",
+                endTime: "2021/11/15 25:00:00",
                 bartenders: "William Billiam, Silly Sam",
                 liters: "20",
                 instances: "1"
