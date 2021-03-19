@@ -23,7 +23,7 @@ export default function Login(props){
 
     const classes = useStyles();
     return(
-        <div class="App-header">
+        <div class="wide">
         <h1> BarIQ </h1>
         <TextField
         onChange = {(e) => {handleUser(e)}}

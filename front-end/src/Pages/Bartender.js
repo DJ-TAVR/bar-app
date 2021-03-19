@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import {Bar, Doughnut} from 'react-chartjs-2';
 import { useTable, useSortBy } from 'react-table'
+import CustomSidebar from '../Components/CustomSidebar'
 
 
 export default function Bartender(props) {
@@ -162,16 +163,14 @@ export default function Bartender(props) {
     let colorCum = colorMapper(cumulativePoursAbove, 10);
 
     return(
-        <div className="Inventory">
-            <Button className = "HelpButton"> ? </Button>
-            <Link to = "/statistics">
-                <Button className = "BackAdminButton">Back to Statistics</Button>
-            </Link>
+            <div class = "row">
+            <CustomSidebar/>
+            <div class = "stay wide center">
             <h1 className = "Table_Text"> Bartender Insights </h1>
             {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
-            <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
+            {/* <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
                 Filters: 3/16/2018; Shift(9AM-12PM);...
-            </Button>
+            </Button> */}
             <div className="Grid">
                 <Bar className ="Chart"
                 data={topOverpouring}
@@ -215,7 +214,7 @@ export default function Bartender(props) {
                     <p className="StatElement" style={{color: colorCum}}>{cumulativePoursAbove}</p>
                 </div>
             </div>
-            <Table {...getTableProps()} className = "Table-header">
+            {/* <Table {...getTableProps()} className = "Table-header">
                 <colgroup>
                     <col class = "green"/>
                 </colgroup>
@@ -244,7 +243,8 @@ export default function Bartender(props) {
                         </tr>)
                     })}
                 </tbody>
-            </Table>
-        </div>
+            </Table> */}
+            </div>
+            </div>
     )
 }

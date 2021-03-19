@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table'
 import { Button } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom'
 import { useTable, useSortBy } from 'react-table'
-
+import CustomSidebar from "../Components/CustomSidebar"
 var selector = 0;
 
 export default function Stickers(props) {
@@ -166,12 +166,12 @@ export default function Stickers(props) {
     } = useTable({ columns, data }, useSortBy);
 
     return(
-        <div className="Stickers">
-            <Button className = "HelpButton"> ? </Button>
-            <Link to = "/admin">
-                <Button className = "BackAdminButton">Back to Dashboard</Button>
-            </Link>
+        <div class ="row">
+            <CustomSidebar/>
+            <div class = "stay wide center">
+
             <h1 class = "Table_Text">Manage Stickers</h1>
+            <div class = "tableDiv">
             <Table {...getTableProps()} className = "Table-header" id="stickers">
                 <colgroup>
                     <col class = "green"/>
@@ -206,10 +206,13 @@ export default function Stickers(props) {
                     })}
                 </tbody>
             </Table>
+            </div>
             <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button>
             {/* Demonstration Commands */}
             <Button onClick={addSticker}>Add Sticker to Bar</Button>
+            <br/>
             <Button onClick={removeSticker}>Remove Sticker from Bar</Button>
+        </div>
         </div>
     )
 }
