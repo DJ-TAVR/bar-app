@@ -22,7 +22,7 @@ export default function CustomSidebar(props){
             <MenuItem><Link to = "/drinks">Drinks</Link></MenuItem>
           </SubMenu>
           <MenuItem><Link to = "/stickers">Manage Stickers</Link></MenuItem>
-          <MenuItem>Registration</MenuItem>
+          <MenuItem><Link to = "/registration">Registration</Link></MenuItem>
         </Menu>
         </SidebarContent>
         <SidebarFooter>

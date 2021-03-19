@@ -47,6 +47,7 @@ img {
   width: 100vw;
   height: 100vh;
   margin-left: 0;
+  background-color: #185875;
 }
 
 .realRow {
@@ -79,7 +80,7 @@ img {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  background-color: #1f1f1f;
+  background-color: #76b5c5;
   min-height: 100vh;
   min-width: 100vw;
 }

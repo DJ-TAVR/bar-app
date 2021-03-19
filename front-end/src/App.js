@@ -55,6 +55,9 @@ function App() {
       <Route path = "/stickers">
         <Stickers csrfToken = {csrfToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
+      <Route path="/registration">
+        <Registration csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
+      </Route>
       <Route path="/">
         <Login csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
