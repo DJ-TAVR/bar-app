@@ -1,14 +1,39 @@
 import ReactDOM from 'react-dom';
 import React, {useState, useEffect} from "react";
-import Table from 'react-bootstrap/Table'
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import {Bar, Doughnut} from 'react-chartjs-2';
 import { useTable, useSortBy } from 'react-table'
 import CustomSidebar from '../Components/CustomSidebar'
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TextField from '@material-ui/core/TextField';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles({
+    table: {
+      minWidth: 650,
+    },
+  });
+  
+  function createData(start, end, presence, liters, instances) {
+    return { start, end, presence, liters, instances };
+  }
+
+  const rows = [
+    createData('2021/11/15 5:00:00', "2021/11/15 7:00:00", "John Ego, Bill Paston", 10, 5),
+    createData('2021/11/15 25:00:00', '2021/11/15 25:00:00', 'William Billiam, Silly Sam', 20, 1)
+  ];
 
 
 export default function Bartender(props) {
+
+    const classes = useStyles();
 
     const [chartData, setChartData] = React.useState({
         average_mlpp:5,
@@ -151,13 +176,13 @@ export default function Bartender(props) {
         updateTableData();
     }, []);
 
-    let {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = useTable({ columns, data: tableData }, useSortBy);
+    // let {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     rows,
+    //     prepareRow,
+    // } = useTable({ columns, data: tableData }, useSortBy);
 
     let colorAvg = colorMapper(Math.abs(averageDifference), 5);
     let colorCum = colorMapper(cumulativePoursAbove, 10);
@@ -244,6 +269,63 @@ export default function Bartender(props) {
                     })}
                 </tbody>
             </Table> */}
+        <div class = "tableDiv">
+            <div>
+            <form>
+                <div class = "realRow">
+                <div class = "spaceRight">
+      <TextField
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="Start Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+        }}
+      />
+      </div>
+      <div>
+       <TextField
+      
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+        }}
+      />
+      </div>
+      </div>
+    </form>
+            </div>
+                <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align = "center">Shift Start</TableCell>
+            <TableCell align = "center">Shift End</TableCell>
+            <TableCell align="right">Bartenders Present(g)</TableCell>
+            <TableCell align="right">Liters Overpoured</TableCell>
+            <TableCell align="right"># Overpouring Instances</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row" align = "center">
+                {row.start}
+              </TableCell>
+              <TableCell align="center">{row.end}</TableCell>
+              <TableCell align="right">{row.presence}</TableCell>
+              <TableCell align="right">{row.liters}</TableCell>
+              <TableCell align="right">{row.instances}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+                </div>
             </div>
             </div>
     )

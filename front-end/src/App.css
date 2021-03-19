@@ -49,6 +49,10 @@ img {
   margin-left: 0;
 }
 
+.realRow {
+  display: inline-flex;
+}
+
 .stuff {
   background-color: #1f1f1f;
   align-items: center;
@@ -56,6 +60,9 @@ img {
   color: white;
 }
 
+.white {
+  color: white imp !important;
+}
 .stay {
   position: absolute;
   top: 0;
@@ -252,6 +259,10 @@ h1 {
   font-size: 300%;
 }
 
+.spaceRight {
+  margin-right: 40px;
+}
+
 .managerButton {
   font-size: 50px;
   width: 14em;
@@ -317,8 +328,8 @@ h1 {
   grid-template-columns: repeat(2, 1fr);
   justify-items: center;
   align-items: center;
-  width: 500px;
-  height: 500px;
+  width: 475px;
+  height: 425px;
   margin-left: -500px;
 }
 

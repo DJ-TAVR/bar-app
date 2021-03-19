@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/pickers": "^3.3.10",
     "@material-ui/styles": "^4.10.0",
     "@randajan/react-popup": "^4.0.1",
     "@testing-library/jest-dom": "^5.11.5",
