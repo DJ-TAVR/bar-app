@@ -19,6 +19,13 @@ const useStyles = makeStyles({
     table: {
       minWidth: 650,
     },
+    multilineColor:{
+        color:'white'
+    }, 
+    
+    input: {
+        color: "white"
+      }
   });
   
   function createData(start, end, presence, liters, instances) {
@@ -54,6 +61,7 @@ export default function Bartender(props) {
             percentage_overpour: 1
         }],
         over_pouring_percentage: 5 });
+
     const [tableData, setTableData] = React.useState([]);
 
     const columns = React.useMemo(() => [{
@@ -281,6 +289,10 @@ export default function Bartender(props) {
         type="datetime-local"
         InputLabelProps = {{
             shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
         }}
       />
       </div>
@@ -293,6 +305,10 @@ export default function Bartender(props) {
         type="datetime-local"
         InputLabelProps = {{
             shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
         }}
       />
       </div>
