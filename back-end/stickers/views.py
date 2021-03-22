@@ -191,3 +191,27 @@ def shifts_stats_view(request):
                 return Response(stats, status=200)
             except:
                 return Response(None, status=400)
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def get_shifts_view(request):
+#     user = request.user
+#     if check_bar_manager_access(user):
+#         if request.method == 'GET':
+#             # not sure what to put here
+#             return get_all_stickers(user)
+#         elif request.method == 'POST':
+#             try:
+#                 list_of_shifts = get_list_of_shifts(request)
+#                 # construct response
+#                 shifts = []
+#                 for shift in list_of_shifts:
+#                     data = {
+#                         'start_time': shift.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+#                         'end_time': shift.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+#                         'percentage_overpour': percentage_overpour
+#                     }
+#                     shifts.append(data)
+#                 return Response(shifts, status=200)
+#             except:
+#                 return Response(None, status=400)
