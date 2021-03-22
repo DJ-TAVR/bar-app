@@ -28,10 +28,7 @@ export default function Home(props) {
         <div class = "stay">
         <h1> BarIQ </h1>
             <Link to = "/register">
-                <Button onClick = {adminReg} className = "button managerButton">Register as Bar Manager</Button>
-            </Link>
-            <Link to = "/register">
-                <Button onClick = {userReg} className = "button bartenderButton">Register as Bartender</Button>
+                <Button onClick = {userReg} className = "button bartenderButton">Register</Button>
             </Link>
             <Link to = "/login">
                 <Button className = "button loginButton"> Log In </Button> 

@@ -17,11 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 urlpatterns = [
+    # path('', admin.site.urls),
     path('admin/', admin.site.urls),
-    path('account/', include('accounts.urls')),
-    path('', include('accounts.urls')),
     path('csrf/', views.get_csrf, name='api-csrf'),
-    path('login/', views.login_view, name='api-login'),
-    path('logout/', views.logout_view, name='api-logout'),
-    path('session/', views.session_view, name='api-session')
+    # route to accounts app
+    path('account/', include('accounts.urls')),
+    # route stickers app
+    path('sticker/', include('stickers.urls')),
 ]

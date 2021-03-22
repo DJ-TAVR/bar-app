@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 export default function Registration(props) {
     const classes = useStyles();
     return(
-        <div class="App-header">
+        <div class="wide">
         <h1> BarIQ </h1>
         
         <TextField className = {classes.root}

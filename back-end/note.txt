@@ -1,0 +1,32 @@
+
+# api view decorator
+    @api_view(['POST']) ## only allow post request
+    @api_view(['POST', 'GET']) ## allow get and post
+read more here: https://www.django-rest-framework.org/api-guide/views/
+    (read function based views part)
+
+# one to many relationship
+read more here: https://docs.djangoproject.com/en/3.1/topics/db/examples/many_to_one/
+
+# one to one relationship 
+read more here: https://docs.djangoproject.com/en/3.1/topics/db/examples/one_to_one/
+
+# makemigrations and migrate
+brief: 
+    when we run "makemigrations" command
+    1. Django look into models.py files check models' definition
+    2. Based on the database that we specify in settings.py, it will generate SQL code 
+    (creating tables, primary keys, foreig keys, constraints, etc.)
+    when we run "migrate" command
+    1. the SQL code got executed and tables are created in the database
+read more here: https://docs.djangoproject.com/en/3.1/topics/migrations/
+
+# serializers
+brief: quick way to convert model to json, and convinient for valiadtion
+read more here: https://www.django-rest-framework.org/api-guide/serializers/
+
+# authentication
+read more here: https://www.django-rest-framework.org/api-guide/authentication/
+
+# permission
+read more hear: https://www.django-rest-framework.org/api-guide/permissions/
