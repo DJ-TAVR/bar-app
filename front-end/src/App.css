@@ -94,13 +94,9 @@ img {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-<<<<<<< HEAD
-  width: 100vw;
-=======
   background-color: #76b5c5;
   min-height: 100vh;
   min-width: 100vw;
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
 }
 
 .HelpButton {
@@ -147,8 +143,6 @@ img {
   flex-direction: column;
   align-items: center;
   border: 1px solid black;
-<<<<<<< HEAD
-=======
 }
 
 .Stickers {
@@ -158,7 +152,6 @@ img {
   flex-direction: column;
   align-items: center;
   border: 1px solid black;
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
 }
 
 .filterButton {
@@ -185,17 +178,6 @@ img {
   font-size: 25px;
 }
 
-<<<<<<< HEAD
-.Table-header,
-td,
-th {
-  width: 80%;
-  border: 1px solid black;
-  align-items: center;
-  table-layout: fixed;
-  color: black;
-  background-color: mediumseagreen;
-=======
 .StickerInput {
   padding: 12px 20px;
   margin: 8px 0;
@@ -219,7 +201,6 @@ th {
   -webkit-box-shadow: 0 2px 2px -2px #0e1119;
   -moz-box-shadow: 0 2px 2px -2px #0e1119;
   box-shadow: 0 2px 2px -2px #0e1119;
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
 }
 
 .Table-header {
@@ -283,11 +264,8 @@ th {
   }
 }
 
-<<<<<<< HEAD
-=======
 /*...*/
 
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
 .App-link {
   color: #61dafb;
 }

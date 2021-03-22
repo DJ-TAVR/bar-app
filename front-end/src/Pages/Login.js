@@ -21,7 +21,6 @@ const useStyles = makeStyles({
 
 export default function Login(props){
 
-<<<<<<< HEAD
     const [openBar, setOpenBar] = React.useState(false)
 
     const classes = useStyles();
@@ -63,54 +62,10 @@ export default function Login(props){
                     </Link>
                 </div>
             </div>
-=======
-    const [user, setUser] = React.useState("");
-    const [pass, setPass] = React.useState("");
-
-    const classes = useStyles();
-    return(
-        <div class="wide">
-        <h1> BarIQ </h1>
-        <TextField
-        onChange = {(e) => {handleUser(e)}}
-        className = {classes.root}
-        InputLabelProps = {{
-            className: classes.input
-        }}
-        InputProps = {{
-            className: classes.input
-        }}
-        label="Username" />
-        <TextField
-        onChange = {(e) => {handlePass(e)}}
-        className = {classes.root}
-        type = "password"
-        InputLabelProps = {{
-            className: classes.input
-        }
-        }
-        InputProps = {{
-            className: classes.input
-        }}
-        label="Password" />
-        <div class = "spaceTop">
-        <Link to = "/admin">
-                <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
-        </Link>
-        </div>
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
         </div>
 
     )
 
-<<<<<<< HEAD
-    function toggleSidebar(){
-        if(openBar){
-            setOpenBar(false);
-        }else{
-            setOpenBar(true);
-        }
-=======
     function handleUser(e){
         setUser(e.target.value)
     }
@@ -150,6 +105,5 @@ export default function Login(props){
         .catch((err)=> {
             console.error(err)
         });
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
     }
 }
