@@ -145,10 +145,10 @@ export default function Bartender(props) {
             credentials: "include",
             body: JSON.stringify({
                 start_time: "2021-03-15 02:00:00", //change these based on filter input
-                end_time: "2021-03-17 08:00:00"
+                end_time: "2021-03-22 08:00:00"
             })
         }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
-        .then(obj => setChartData(obj.body));
+        .then(obj => console.log(obj.body));
     }
 
     function updateTableData() {
