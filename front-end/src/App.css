@@ -282,6 +282,11 @@ h1 {
   visibility: hidden;
 }
 
+#loginFailure {
+  visibility: hidden;
+  color: red;
+}
+
 .rightmost {
   float: right;
 }

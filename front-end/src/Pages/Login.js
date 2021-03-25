@@ -4,7 +4,7 @@ import React, {useState, useEffect} from "react";
 import {TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles({
     root: {
@@ -20,8 +20,19 @@ export default function Login(props){
 
     const [user, setUser] = React.useState("");
     const [pass, setPass] = React.useState("");
+    const [authenticated, setAuthenticated] = React.useState(0);
 
     const classes = useStyles();
+
+    if (authenticated == 1) {
+        document.getElementById("loginFailure").style.visibility = "hidden";
+        return <Redirect to='/admin'/>
+    } else if (authenticated == 2) {
+        setAuthenticated(0);
+        document.getElementById("loginFailure").style.visibility = "visible";
+        return <Redirect to='/login'/>
+    }
+
     return(
         <div class="wide">
         <h1> BarIQ </h1>
@@ -48,10 +59,9 @@ export default function Login(props){
         }}
         label="Password" />
         <div class = "spaceTop">
-        <Link to = "/admin">
-                <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
-        </Link>
+        <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
         </div>
+        <p id="loginFailure">Invalid Credentials!</p>
         </div>
     )
 
@@ -89,10 +99,15 @@ export default function Login(props){
             body: JSON.stringify({username: user, password: pass})
         })
         .then((res) => {
-            console.log(res)
+            if (res.status == 200) {
+                setAuthenticated(1);
+            } else {
+                setAuthenticated(2);
+            }
+            console.log(res);
         })
         .catch((err)=> {
-            console.error(err)
+            console.error(err);
         });
     }
 }
