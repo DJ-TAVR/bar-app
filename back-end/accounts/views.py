@@ -42,13 +42,22 @@ def session_view(request):
 
     return JsonResponse({'isAuthenticated': True})
 
+# Bartender 
+@api_view(['POST'])
+def create_bartender_view(request):
+    pass
 
-def whoami_view(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'isAuthenticated': False})
+@api_view(['POST'])
+def update_bartender_view(request):
+    pass
 
-    return JsonResponse({'username': request.user.username})
+@api_view(['GET'])
+def get_bartenders_view(request):
+    pass
 
+@api_view(['POST'])
+def delete_bartender_view(request):
+    pass
 
 
 
