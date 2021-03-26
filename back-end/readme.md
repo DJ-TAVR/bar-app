@@ -224,6 +224,7 @@ method POST
 
 Request body
 {
+    "id": id_here,
     "first_name": "first_name_here",
     "last_name": "last_name_here",
     "email": "email_here"
@@ -236,24 +237,20 @@ method POST
 127.0.0.1:8000/account/get_bartenders/
 
 Result
-{
-    [
-        {
-            "bartender_id": 1,
-            "bartender_name": "firstname + lastname",
-            "bartender_email": "email_here"
-        }, 
-        {
-            "bartender_id": 2,
-            ...
+[
+    {
+        "account": {
+            "first_name": "he",
+            "last_name": "ha",
+            "username": "tuanhuynh",
+            "email": "newmail@gamill.com"
         },
-        ...,
-        {
-            "bartender_id": 100,
-            ...
-        }
-    ]
-}
+        "id": 2
+    },
+    {
+        # second bartenders info here
+    }
+]
 
 # delete a bartender
 method POST

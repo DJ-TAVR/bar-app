@@ -21,7 +21,7 @@ class Shift(models.Model):
     # begin the shift
     start_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     target = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    bartenders = models.ManyToManyField(User, related_name='bartenders')
+    bartenders = models.ManyToManyField(User, related_name='shifts')
     # end shift
     end_time = models.DateTimeField(auto_now=True, auto_now_add=False, null=True, blank=True)
     average_mlpp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # average mlpp from all stickers

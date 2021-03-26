@@ -5,8 +5,15 @@ from django.contrib import messages
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework.decorators import api_view 
-
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.models import User
+import random
+from rest_framework.response import Response
+from stickers.models import Bar
+from .serializers import BartenderSerializer
+from rest_framework.permissions import IsAuthenticated
+from .models import Bartender
+from django.core.mail import send_mail
 # Create your views here.
 ### API using DRF
 @api_view(['POST'])
@@ -44,26 +51,95 @@ def session_view(request):
 
 # Bartender 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_bartender_view(request):
-    pass
+    # extract data from request
+    first_name = request.data['first_name']
+    last_name = request.data['last_name']
+    email = request.data['email']
+    bar_manager = request.user
+
+    # check permission
+    check_bar_manager_access(bar_manager)
+    # check valid email
+    if not User.objects.filter(email=email).exists():
+        # generate username
+        username = generate_username(first_name, last_name)
+        # generate password
+        password = User.objects.make_random_password()
+        # create user
+        user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+        group = Group.objects.get(name="Bartender")
+        user.groups.add(group)
+        user.save()
+        current_bar = Bar.objects.get(manager=bar_manager)
+        bartender = Bartender(account=user, manager=bar_manager, work_at=current_bar)
+        bartender.save()
+        # send mail
+        message = "Your username is " + username + " and your password is " + password
+        send_mail(
+            'BARIQ - Account information',
+            message,
+            'bariq.dev@gmail.com',
+            [email],
+            fail_silently=False,
+        )
+        return Response({"id": bartender.id}, status=200)
+    return Response({"message_error": "email already exist"}, status=400)
 
 @api_view(['POST'])
 def update_bartender_view(request):
-    pass
+    new_first_name = request.data['first_name']
+    new_last_name = request.data['last_name']
+    new_email = request.data['email']
+    id = request.data['id']
+    try:
+        username = Bartender.objects.get(id=id).account
+        user = User.objects.get(username=username)
+        user.first_name = new_first_name
+        user.last_name = new_last_name
+        user.email = new_email
+        user.save()
+        return Response(status=200)
+    except:
+        return Response({'message_error': 'id does not exist'},status=400)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_bartenders_view(request):
-    pass
+    current_bar = Bar.objects.filter(manager=request.user)
+    bartenders = Bartender.objects.filter(work_at=current_bar.first().id)
+    serialized_bartenders = BartenderSerializer(bartenders, many=True)
+    return Response(serialized_bartenders.data, status=200)
 
 @api_view(['POST'])
 def delete_bartender_view(request):
-    pass
+    id = request.data['id']
+    try:
+        bartender = Bartender.objects.get(id=id)
+        username = bartender.account
+        user = User.objects.get(username=username)
+        user.delete()
+        return Response(status=200)
+    except:
+        return Response({'message_error': 'id does not exist'},status=400)
 
+# bartender - helper functions
+def generate_username(first_name, last_name):
+    username = first_name + last_name
+    user_qs = User.objects.filter(username=username)
+    while user_qs.exists():
+        number = random.randint(1, 100)
+        username += str(number)  
+        user_qs = User.objects.filter(username=username)
+    return username
 
-
-
-
-
+def check_bar_manager_access(user):
+    group = Group.objects.get(name='Bar Manager')
+    if group in user.groups.all():
+        return True
+    else:
+        return JsonResponse({'detail': 'Insufficient privilege.'}, status=400)
 
 # ##### Pure django
 # from . import forms
