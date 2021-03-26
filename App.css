@@ -1,10 +1,5 @@
 .App {
   text-align: center;
-  display: inline-flex;
-}
-
-.row {
-  display: inline-flex;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -43,15 +38,6 @@ img {
   color: white;
 }
 
-.stay {
-  position: absolute;
-}
-
-.sidebarSize {
-  height: 100vh !important;
-  position: absolute;
-}
-
 .spaceTop {
   margin-top: 25px;
 }
@@ -85,6 +71,11 @@ img {
   left: 0;
   bottom: 0;
   display: block;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  background-color: #76b5c5;
+  min-height: 100vh;
+  min-width: 100vw;
 }
 .wide {
   width: 100vw;
@@ -168,6 +159,7 @@ img {
 
 .Table_Text {
   color: white;
+  padding-left: 3%;
 }
 .Pouring_Targets {
   color: white;
@@ -272,6 +264,7 @@ img {
 
 h1 {
   font-size: 300%;
+
 }
 
 .spaceRight {
