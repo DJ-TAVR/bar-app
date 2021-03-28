@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React, {useState, useEffect} from "react";
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
-import {Bar, Doughnut} from 'react-chartjs-2';
+import {Bar, Doughnut, defaults} from 'react-chartjs-2';
 import { useTable, useSortBy } from 'react-table'
 import CustomSidebar from '../Components/CustomSidebar'
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+
+defaults.global.defaultFontColor = 'white';
 
 const useStyles = makeStyles({
     table: {

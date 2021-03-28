@@ -11,6 +11,7 @@ export default function AdminSelect(props){
     <CustomSidebar/>
     <div class = "stay wide center">
             <h1>Welcome!</h1>
+            <h6>Please select from one of the options to the left.</h6>
         </div>
         </div>
     )
