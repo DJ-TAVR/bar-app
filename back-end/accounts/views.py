@@ -18,9 +18,8 @@ from django.core.mail import send_mail
 ### API using DRF
 @api_view(['POST'])
 def login_view(request):
-    data = json.loads(request.body)
-    username = data.get('username')
-    password = data.get('password')
+    username = request.data['username']
+    password = request.data['password']
 
     if username is None or password is None:
         return JsonResponse({'detail': 'Please provide username and password.'}, status=400)
@@ -31,7 +30,8 @@ def login_view(request):
         return JsonResponse({'detail': 'Invalid credentials.'}, status=400)
 
     login(request, user)
-    return JsonResponse({'detail': 'Successfully logged in.'})
+    print(list(user.groups.all().values('name')))
+    return JsonResponse({'role': list(user.groups.all().values('name'))})
 
 @api_view(['POST'])
 def logout_view(request):
