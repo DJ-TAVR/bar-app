@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     
     input: {
         color: "white"
-      }
+      },
   });
   
   function createData(start, end, presence, liters, instances) {
@@ -101,6 +101,7 @@ export default function Bartender(props) {
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
             data: topOverpours,
+            backgroundColor: "rgba(133,77,255,255)"
           }
         ]
     }
@@ -110,7 +111,7 @@ export default function Bartender(props) {
         datasets: [
             {
                 data: [chartData.over_pouring_percentage, 100 - chartData.over_pouring_percentage],
-                backgroundColor: ['rgba(255,0,0,1)', 'rgba(0,255,0,1)'],
+                backgroundColor: ['rgba(133,77,255,255)', 'rgba(46,226,157,255)'],
             }
         ]
 
@@ -201,7 +202,50 @@ export default function Bartender(props) {
             <div class = "row">
             <CustomSidebar/>
             <div class = "stay wide center">
+            <p/>
+            <p/>
+            <p/>
             <h1 className = "Table_Text"> Bartender Insights </h1>
+            <p/>
+            <div>
+            <form>
+                <div class = "realRow">
+                <div class = "spaceRight">
+      <TextField
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="Start Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      <div>
+       <TextField
+      
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      </div>
+    </form>
+            </div>
+            <p/>
+            <p/>
             {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
             {/* <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
                 Filters: 3/16/2018; Shift(9AM-12PM);...
@@ -248,6 +292,7 @@ export default function Bartender(props) {
                     <p className="StatHeader">Cumulative Instances of Overpouring</p>
                     <p className="StatElement" style={{color: colorCum}}>{cumulativePoursAbove}</p>
                 </div>
+                <p/>
             </div>
             {/* <Table {...getTableProps()} className = "Table-header">
                 <colgroup>
@@ -279,46 +324,12 @@ export default function Bartender(props) {
                     })}
                 </tbody>
             </Table> */}
+            <p/>
+            
         <div class = "tableDiv">
-            <div>
-            <form>
-                <div class = "realRow">
-                <div class = "spaceRight">
-      <TextField
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="Start Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-            className: classes.input
-        }}
-        InputProps={{
-            className: classes.input,
-        }}
-      />
-      </div>
-      <div>
-       <TextField
-      
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="End Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-            className: classes.input
-        }}
-        InputProps={{
-            className: classes.input,
-        }}
-      />
-      </div>
-      </div>
-    </form>
-            </div>
+           
                 <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table className={classes.table} style ={{backgroundColor:"#2ee29d"}} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align = "center">Shift Start</TableCell>

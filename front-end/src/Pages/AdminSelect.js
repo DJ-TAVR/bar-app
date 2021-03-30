@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 import 'react-pro-sidebar/dist/css/styles.css';
 import CustomSidebar from '../Components/CustomSidebar';
-
+import logo from '../Assets/logo.png';
 
 export default function AdminSelect(props){
 
@@ -10,8 +10,10 @@ export default function AdminSelect(props){
     <div class = "row">
     <CustomSidebar/>
     <div class = "stay wide center">
+            <img src={logo}/>
+            <p/>
             <h1>Welcome!</h1>
-            <h6>Please select from one of the options to the left.</h6>
+            <h6>Please use the sidebar to navigate between pages.</h6>
         </div>
         </div>
     )

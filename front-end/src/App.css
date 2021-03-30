@@ -1,11 +1,20 @@
 .App {
   text-align: center;
+  overflow: hidden !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+html,
+body {
+  height: 100% !important;
+}
+body {
+  background: #3e4257 !important;
 }
 
 .tableDiv {
@@ -205,12 +214,8 @@ img {
   padding-left: 2%;
 }
 
-.Table-header tr:nth-child(odd) {
-  background-color: #3c8b60;
-}
-
-.Table-header tr:nth-child(even) {
-  background-color: #289157;
+.Table-header tr {
+  background-color: #2ee29d;
 }
 
 .Table-header th {
@@ -285,6 +290,11 @@ h1 {
 #loginFailure {
   visibility: hidden;
   color: red;
+}
+
+.follow {
+  position: fixed;
+  z-index: 99 !important;
 }
 
 .rightmost {
