@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 export default function CustomSidebar(props){
 
     return(
-    <div>
+    <div class="follow">
     <ProSidebar popperArrow = "true" className = "sidebarSize" width = "175px">
         <SidebarContent>
         <Menu iconShape = "square">

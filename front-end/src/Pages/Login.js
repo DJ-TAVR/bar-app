@@ -4,10 +4,10 @@ import React, {useState, useEffect} from "react";
 import {TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 
 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
+import { Link, Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles({
     root: {
@@ -21,47 +21,50 @@ const useStyles = makeStyles({
 
 export default function Login(props){
 
-    const [openBar, setOpenBar] = React.useState(false)
+    const [user, setUser] = React.useState("");
+    const [pass, setPass] = React.useState("");
+    const [authenticated, setAuthenticated] = React.useState(0);
 
     const classes = useStyles();
+
+    if (authenticated == 1) {
+        document.getElementById("loginFailure").style.visibility = "hidden";
+        return <Redirect to='/admin'/>
+    } else if (authenticated == 2) {
+        setAuthenticated(0);
+        document.getElementById("loginFailure").style.visibility = "visible";
+        return <Redirect to='/login'/>
+    }
+
     return(
-        <div class = "row">
-            <ProSidebar className = "sidebarSize" width = "200px" collapsed = {openBar}>
-                <Menu iconShape = "square">
-                    <MenuItem onClick = {toggleSidebar}>Open Sidebar</MenuItem>
-                    <MenuItem>Dashboard</MenuItem>
-                    <SubMenu title = "Components">
-                    <MenuItem>Component 1</MenuItem>
-                    <MenuItem>Component 2</MenuItem>
-                    </SubMenu>
-                </Menu>
-            </ProSidebar>
-                <div class="App-header stay">
-                    <h1> BarIQ </h1>
-                    <TextField className = {classes.root}
-                        InputLabelProps = {{
-                            className: classes.input
-                        }}
-                        InputProps = {{
-                            className: classes.input
-                        }}
-                        label="Username" />
-                        <TextField className = {classes.root}
-                        type = "password"
-                        InputLabelProps = {{
-                            className: classes.input
-                        }
-                        }
-                        InputProps = {{
-                            className: classes.input
-                        }}
-                        label="Password" />
-                <div class = "spaceTop">
-                    <Link to = "/admin">
-                            <Button color = "primary">Login</Button>{' '}
-                    </Link>
-                </div>
-            </div>
+        <div class="wide">
+        <h1> BarIQ </h1>
+        <TextField
+        onChange = {(e) => {handleUser(e)}}
+        className = {classes.root}
+        InputLabelProps = {{
+            className: classes.input
+        }}
+        InputProps = {{
+            className: classes.input
+        }}
+        label="Username" />
+        <TextField
+        onChange = {(e) => {handlePass(e)}}
+        className = {classes.root}
+        type = "password"
+        InputLabelProps = {{
+            className: classes.input
+        }
+        }
+        InputProps = {{
+            className: classes.input
+        }}
+        label="Password" />
+        <div class = "spaceTop">
+        <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
+        </div>
+        <p id="loginFailure">Invalid Credentials!</p>
         </div>
 
     )
@@ -100,10 +103,15 @@ export default function Login(props){
             body: JSON.stringify({username: user, password: pass})
         })
         .then((res) => {
-            console.log(res)
+            if (res.status == 200) {
+                setAuthenticated(1);
+            } else {
+                setAuthenticated(2);
+            }
+            console.log(res);
         })
         .catch((err)=> {
-            console.error(err)
+            console.error(err);
         });
     }
 }

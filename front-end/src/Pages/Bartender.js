@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React, {useState, useEffect} from "react";
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
-import {Bar, Doughnut} from 'react-chartjs-2';
+import {Bar, Doughnut, defaults} from 'react-chartjs-2';
 import { useTable, useSortBy } from 'react-table'
 import CustomSidebar from '../Components/CustomSidebar'
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,10 +15,19 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+defaults.global.defaultFontColor = 'white';
+
 const useStyles = makeStyles({
     table: {
       minWidth: 650,
     },
+    multilineColor:{
+        color:'white'
+    }, 
+    
+    input: {
+        color: "white"
+      },
   });
   
   function createData(start, end, presence, liters, instances) {
@@ -54,6 +63,7 @@ export default function Bartender(props) {
             percentage_overpour: 1
         }],
         over_pouring_percentage: 5 });
+
     const [tableData, setTableData] = React.useState([]);
 
     const columns = React.useMemo(() => [{
@@ -91,6 +101,7 @@ export default function Bartender(props) {
             borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
             data: topOverpours,
+            backgroundColor: "rgba(133,77,255,255)"
           }
         ]
     }
@@ -100,7 +111,7 @@ export default function Bartender(props) {
         datasets: [
             {
                 data: [chartData.over_pouring_percentage, 100 - chartData.over_pouring_percentage],
-                backgroundColor: ['rgba(255,0,0,1)', 'rgba(0,255,0,1)'],
+                backgroundColor: ['rgba(133,77,255,255)', 'rgba(46,226,157,255)'],
             }
         ]
 
@@ -137,10 +148,10 @@ export default function Bartender(props) {
             credentials: "include",
             body: JSON.stringify({
                 start_time: "2021-03-15 02:00:00", //change these based on filter input
-                end_time: "2021-03-17 08:00:00"
+                end_time: "2021-03-22 08:00:00"
             })
         }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
-        .then(obj => setChartData(obj.body));
+        .then(obj => console.log(obj.body));
     }
 
     function updateTableData() {
@@ -191,7 +202,50 @@ export default function Bartender(props) {
             <div class = "row">
             <CustomSidebar/>
             <div class = "stay wide center">
+            <p/>
+            <p/>
+            <p/>
             <h1 className = "Table_Text"> Bartender Insights </h1>
+            <p/>
+            <div>
+            <form>
+                <div class = "realRow">
+                <div class = "spaceRight">
+      <TextField
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="Start Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      <div>
+       <TextField
+      
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      </div>
+    </form>
+            </div>
+            <p/>
+            <p/>
             {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
             {/* <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
                 Filters: 3/16/2018; Shift(9AM-12PM);...
@@ -238,6 +292,7 @@ export default function Bartender(props) {
                     <p className="StatHeader">Cumulative Instances of Overpouring</p>
                     <p className="StatElement" style={{color: colorCum}}>{cumulativePoursAbove}</p>
                 </div>
+                <p/>
             </div>
             {/* <Table {...getTableProps()} className = "Table-header">
                 <colgroup>
@@ -269,38 +324,12 @@ export default function Bartender(props) {
                     })}
                 </tbody>
             </Table> */}
+            <p/>
+            
         <div class = "tableDiv">
-            <div>
-            <form>
-                <div class = "realRow">
-                <div class = "spaceRight">
-      <TextField
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="Start Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-        }}
-      />
-      </div>
-      <div>
-       <TextField
-      
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="End Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-        }}
-      />
-      </div>
-      </div>
-    </form>
-            </div>
+           
                 <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table className={classes.table} style ={{backgroundColor:"#2ee29d"}} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align = "center">Shift Start</TableCell>

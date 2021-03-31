@@ -203,3 +203,70 @@ sample result:
     ],
     "over_pouring_percentage": 100.0
 }
+
+# create a bartender
+method POST
+127.0.0.1:8000/account/create_bartender/
+
+Request body
+{
+    "first_name": "first_name_here",
+    "last_name": "last_name_here",
+    "email": "email_here"
+}
+
+if HTTP STATUS != 200, fail to create bartender
+if success, an email will be sent to bartender's email with username and password
+
+# update a bartender
+method POST
+127.0.0.1:8000/account/update_bartender/
+
+Request body
+{
+    "first_name": "first_name_here",
+    "last_name": "last_name_here",
+    "email": "email_here"
+}
+
+if HTTP STATUS != 200, fail to update bartender
+
+# get bartender list
+method POST
+127.0.0.1:8000/account/get_bartenders/
+
+Result
+{
+    [
+        {
+            "bartender_id": 1,
+            "bartender_name": "firstname + lastname",
+            "bartender_email": "email_here"
+        }, 
+        {
+            "bartender_id": 2,
+            ...
+        },
+        ...,
+        {
+            "bartender_id": 100,
+            ...
+        }
+    ]
+}
+
+# delete a bartender
+method POST
+127.0.0.1:8000/account/delete_bartender/
+
+Request body
+{
+    "bartender_id": id_here 
+}
+
+Result
+{
+    "error_message": "will_return_error_message_json_if_status_code_not_200"
+}
+
+if HTTP STATUS != 200, fail to delete bartender

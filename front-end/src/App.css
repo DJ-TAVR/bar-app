@@ -5,12 +5,21 @@
 
 .row {
   display: inline-flex;
+  overflow: hidden !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+html,
+body {
+  height: 100% !important;
+}
+body {
+  background: #3e4257 !important;
 }
 
 .tableDiv {
@@ -94,7 +103,7 @@ img {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  background-color: #76b5c5;
+  background-color: #3e4257;
   min-height: 100vh;
   min-width: 100vw;
 }
@@ -219,12 +228,8 @@ img {
   padding-left: 2%;
 }
 
-.Table-header tr:nth-child(odd) {
-  background-color: #3c8b60;
-}
-
-.Table-header tr:nth-child(even) {
-  background-color: #289157;
+.Table-header tr {
+  background-color: #2ee29d;
 }
 
 .Table-header th {
@@ -294,6 +299,16 @@ h1 {
 
 #submitChanges {
   visibility: hidden;
+}
+
+#loginFailure {
+  visibility: hidden;
+  color: red;
+}
+
+.follow {
+  position: fixed;
+  z-index: 99 !important;
 }
 
 .rightmost {
