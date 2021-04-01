@@ -5,6 +5,8 @@ import Registration from './Pages/Registration'
 import Login from './Pages/Login'
 import AdminSelect from './Pages/AdminSelect'
 import Stickers from './Pages/Stickers'
+import AddBartender from './Pages/AddBartender'
+import Help from './Pages/Help'
 import {
   BrowserRouter,
   Switch,
@@ -49,6 +51,9 @@ function App() {
       <Route path="/bartender">
         <Bartender userType = {userType} handleUserType = {handleUserType}/>
       </Route>
+      <Route path="/addBartender">
+        <AddBartender userType = {userType} handleUserType = {handleUserType}/>
+      </Route>
       <Route path = "/drinks">
         <Drinks userType = {userType} handleUserType = {handleUserType}/>
       </Route>
@@ -57,6 +62,9 @@ function App() {
       </Route>
       <Route path="/registration">
         <Registration csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
+      </Route>
+      <Route path = "/help">
+        <Help />
       </Route>
       <Route path="/">
         <Login csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
