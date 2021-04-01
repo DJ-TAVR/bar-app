@@ -44,6 +44,7 @@ export default function Bartender(props) {
 
     const classes = useStyles();
 
+    const [showTable, setShowTable] = React.useState(true)
     const [chartData, setChartData] = React.useState({
         average_mlpp:5,
         cumulative_mlpp:0,
@@ -199,6 +200,7 @@ export default function Bartender(props) {
     let colorCum = colorMapper(cumulativePoursAbove, 10);
 
     return(
+            (!showTable && (
             <div class = "row">
             <CustomSidebar/>
             <div class = "stay wide center">
@@ -206,46 +208,7 @@ export default function Bartender(props) {
             <p/>
             <p/>
             <h1 className = "Table_Text"> Bartender Insights </h1>
-            <p/>
-            <div>
-            <form>
-                <div class = "realRow">
-                <div class = "spaceRight">
-      <TextField
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="Start Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-            className: classes.input
-        }}
-        InputProps={{
-            className: classes.input,
-        }}
-      />
-      </div>
-      <div>
-       <TextField
-      
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="End Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-            className: classes.input
-        }}
-        InputProps={{
-            className: classes.input,
-        }}
-      />
-      </div>
-      </div>
-    </form>
-            </div>
-            <p/>
-            <p/>
+            <br/>
             {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
             {/* <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
                 Filters: 3/16/2018; Shift(9AM-12PM);...
@@ -294,6 +257,14 @@ export default function Bartender(props) {
                 </div>
                 <p/>
             </div>
+            <Button>Switch to Shift Table</Button>
+
+
+
+
+
+
+
             {/* <Table {...getTableProps()} className = "Table-header">
                 <colgroup>
                     <col class = "green"/>
@@ -324,10 +295,50 @@ export default function Bartender(props) {
                     })}
                 </tbody>
             </Table> */}
-            <p/>
-            
-        <div class = "tableDiv">
-           
+
+
+
+
+
+
+                               {/* <div class = "tableDiv">
+            <div>
+            <form>
+                <div class = "realRow">
+                <div class = "spaceRight">
+      <TextField
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="Start Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      <div>
+       <TextField
+      
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      </div>
+    </form>
+            </div>
                 <TableContainer component={Paper}>
       <Table className={classes.table} style ={{backgroundColor:"#2ee29d"}} aria-label="simple table">
         <TableHead>
@@ -354,8 +365,85 @@ export default function Bartender(props) {
         </TableBody>
       </Table>
     </TableContainer>
+                </div> */}
+
+
+
+            </div>
+            </div>
+    ) || showTable && (
+        <div class = "row">
+            <CustomSidebar/>
+            <div class = "stay wide center">
+            <h1 className = "Table_Text"> Bartender Insights </h1>
+            <br/>
+            <div class = "tableDiv">
+            <div>
+            <form>
+                <div class = "realRow">
+                <div class = "spaceRight">
+      <TextField
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="Start Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      <div>
+       <TextField
+      
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      </div>
+    </form>
+            </div>
+                <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align = "center">Shift Start</TableCell>
+            <TableCell align = "center">Shift End</TableCell>
+            <TableCell align="right">Bartenders Present(g)</TableCell>
+            <TableCell align="right">Liters Overpoured</TableCell>
+            <TableCell align="right"># Overpouring Instances</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row" align = "center">
+                {row.start}
+              </TableCell>
+              <TableCell align="center">{row.end}</TableCell>
+              <TableCell align="right">{row.presence}</TableCell>
+              <TableCell align="right">{row.liters}</TableCell>
+              <TableCell align="right">{row.instances}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
                 </div>
             </div>
-            </div>
+        </div>
+    ))
     )
 }

@@ -25,6 +25,25 @@ export default function Login(props){
     const [pass, setPass] = React.useState("");
     const [authenticated, setAuthenticated] = React.useState(0);
 
+    useEffect(() => {
+        fetch("http://localhost:8000/api/session/", {
+            credentials: "include",
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("session data: \n", data);
+            if (data.isAuthenticated) {
+              props.setIsAuth(true)
+            } else {
+              props.setIsAuth(false)
+              getCSRF();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }, [])
+
     const classes = useStyles();
 
     if (authenticated == 1) {
@@ -37,6 +56,7 @@ export default function Login(props){
     }
 
     return(
+        (!props.isAuth && (
         <div class="wide">
         <h1> BarIQ </h1>
         <TextField
@@ -66,8 +86,25 @@ export default function Login(props){
         </div>
         <p id="loginFailure">Invalid Credentials!</p>
         </div>
-
+        ))||
+        (props.isAuth &&
+            <h1>already logged in</h1>
+        )
     )
+
+    function getCSRF(){
+        fetch("http://localhost:8000/api/csrf/", {
+            credentials: "include",
+          })
+          .then((res) => {
+            let csrfToken = res.headers.get("X-CSRFToken");
+            props.setCSRFToken(csrfToken);
+            console.log("csrf retrieved: " , csrfToken);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
 
     function handleUser(e){
         setUser(e.target.value)
@@ -76,27 +113,27 @@ export default function Login(props){
     function handlePass(e){
         setPass(e.target.value)
     }
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+    // function getCookie(name) {
+    //     let cookieValue = null;
+    //     if (document.cookie && document.cookie !== '') {
+    //         const cookies = document.cookie.split(';');
+    //         for (let i = 0; i < cookies.length; i++) {
+    //             const cookie = cookies[i].trim();
+    //             // Does this cookie string begin with the name we want?
+    //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return cookieValue;
+    // }
+
     function loginButton(){
-        let csrf = getCookie('csrftoken');
         fetch("http://localhost:8000/account/login/", {
             method: "POST",
             headers: {
-                "X-CSRFToken": csrf ,
+                "X-CSRFToken": props.csrfToken ,
                 "Content-Type": "application/json"
             },
             credentials: "include",

@@ -67,7 +67,7 @@ function App() {
         <Help />
       </Route>
       <Route path="/">
-        <Login csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
+        <Login isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       
     </Switch>

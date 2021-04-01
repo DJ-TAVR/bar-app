@@ -34,7 +34,9 @@ img {
 }
 
 .center {
+  display: block;
   text-align: center;
+  margin: auto;
 }
 
 .sidebarSize {
@@ -103,7 +105,7 @@ img {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  background-color: #3e4257;
+  background-color: #1f1f1f;
   min-height: 100vh;
   min-width: 100vw;
 }
