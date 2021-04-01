@@ -21,54 +21,32 @@ const useStyles = makeStyles({
 
 export default function Login(props){
 
-<<<<<<< HEAD
-    const [openBar, setOpenBar] = React.useState(false)
-
-    const classes = useStyles();
-    return(
-        <div class = "row">
-            <ProSidebar className = "sidebarSize" width = "200px" collapsed = {openBar}>
-                <Menu iconShape = "square">
-                    <MenuItem onClick = {toggleSidebar}>Open Sidebar</MenuItem>
-                    <MenuItem>Dashboard</MenuItem>
-                    <SubMenu title = "Components">
-                    <MenuItem>Component 1</MenuItem>
-                    <MenuItem>Component 2</MenuItem>
-                    </SubMenu>
-                </Menu>
-            </ProSidebar>
-                <div class="App-header stay">
-                    <h1> BarIQ </h1>
-                    <TextField className = {classes.root}
-                        InputLabelProps = {{
-                            className: classes.input
-                        }}
-                        InputProps = {{
-                            className: classes.input
-                        }}
-                        label="Username" />
-                        <TextField className = {classes.root}
-                        type = "password"
-                        InputLabelProps = {{
-                            className: classes.input
-                        }
-                        }
-                        InputProps = {{
-                            className: classes.input
-                        }}
-                        label="Password" />
-                <div class = "spaceTop">
-                    <Link to = "/admin">
-                            <Button color = "primary">Login</Button>{' '}
-                    </Link>
-                </div>
-            </div>
-=======
     const [user, setUser] = React.useState("");
     const [pass, setPass] = React.useState("");
 
+    useEffect(() => {
+        fetch("http://localhost:8000/api/session/", {
+            credentials: "include",
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("session data: \n", data);
+            if (data.isAuthenticated) {
+              props.setIsAuth(true)
+            } else {
+              props.setIsAuth(false)
+              getCSRF();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }, [])
+
     const classes = useStyles();
+
     return(
+        (!props.isAuth && (
         <div class="wide">
         <h1> BarIQ </h1>
         <TextField
@@ -98,19 +76,27 @@ export default function Login(props){
                 <Button onClick = {loginButton} className = "button bartenderButton">Login</Button>
         </Link>
         </div>
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
         </div>
-
+        ))||
+        (props.isAuth &&
+            <h1>already logged in</h1>
+        )
     )
 
-<<<<<<< HEAD
-    function toggleSidebar(){
-        if(openBar){
-            setOpenBar(false);
-        }else{
-            setOpenBar(true);
-        }
-=======
+    function getCSRF(){
+        fetch("http://localhost:8000/api/csrf/", {
+            credentials: "include",
+          })
+          .then((res) => {
+            let csrfToken = res.headers.get("X-CSRFToken");
+            props.setCSRFToken(csrfToken);
+            console.log("csrf retrieved: " , csrfToken);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
+
     function handleUser(e){
         setUser(e.target.value)
     }
@@ -118,27 +104,27 @@ export default function Login(props){
     function handlePass(e){
         setPass(e.target.value)
     }
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+    // function getCookie(name) {
+    //     let cookieValue = null;
+    //     if (document.cookie && document.cookie !== '') {
+    //         const cookies = document.cookie.split(';');
+    //         for (let i = 0; i < cookies.length; i++) {
+    //             const cookie = cookies[i].trim();
+    //             // Does this cookie string begin with the name we want?
+    //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return cookieValue;
+    // }
+
     function loginButton(){
-        let csrf = getCookie('csrftoken');
         fetch("http://localhost:8000/account/login/", {
             method: "POST",
             headers: {
-                "X-CSRFToken": csrf ,
+                "X-CSRFToken": props.csrfToken ,
                 "Content-Type": "application/json"
             },
             credentials: "include",
@@ -150,6 +136,5 @@ export default function Login(props){
         .catch((err)=> {
             console.error(err)
         });
->>>>>>> 0f34c609ac8f03e52b7935302141560a1e83577c
     }
 }
