@@ -107,7 +107,10 @@ def calculate_avg_MLPP(list_of_shifts):
     for shift in list_of_shifts:
         totalNumShifts += 1
         totalAvgMLPP += shift.average_mlpp
-    return totalAvgMLPP/totalNumShifts
+    if (totalNumShifts != 0):
+        return totalAvgMLPP/totalNumShifts
+    else:
+        return 0
 
 
 def calculate_cumulative_overpouring(list_of_shifts):
