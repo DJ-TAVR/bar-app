@@ -15,8 +15,61 @@ const useStyles = makeStyles({
         color: "white"
     }
 });
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 export default function Registration(props) {
+    const [first, setFirst] = React.useState("");
+    const [last, setLast] = React.useState("");
+    const [email, setEmail] = React.useState("");
+
     const classes = useStyles();
+
+    function handleFirst(e){
+        setFirst(e.target.value)
+    }
+
+    function handleLast(e){
+        setLast(e.target.value)
+    }
+
+    function handleEmail(e){
+        setEmail(e.target.value)
+    }
+
+    function registerButton(){
+        let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/account/create_bartender/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({first_name: first, last_name: last, email: email})
+        })
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err)=> {
+            console.error(err);
+        });
+    }
+
     return(
         <div class="row">
             <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
@@ -24,16 +77,17 @@ export default function Registration(props) {
         <h1> BarIQ </h1>
         
         <TextField className = {classes.root}
+        onChange = {(e) => {handleFirst(e)}}
         InputLabelProps = {{
             className: classes.input
         }}
         InputProps = {{
             className: classes.input
         }}
-        label="Username" />
+        label="First Name" />
 
         <TextField className = {classes.root}
-        type = "password"
+        onChange = {(e) => {handleLast(e)}}
         InputLabelProps = {{
             className: classes.input
         }
@@ -41,31 +95,21 @@ export default function Registration(props) {
         InputProps = {{
             className: classes.input
         }}
-        label="Password" />
+        label="Last Name" />
 
         <TextField className = {classes.root}
-        InputLabelProps = {{
-            className: classes.input
-        }}
-        type = "password"
-        InputProps = {{
-            className: classes.input
-        }}
-        label="Confirm Password" />
-
-        {props.userType == "admin" ? 
-        <TextField className = {classes.root}
+        onChange = {(e) => {handleEmail(e)}}
         InputLabelProps = {{
             className: classes.input
         }}
         InputProps = {{
             className: classes.input
         }}
-        label="Access ID" />
-        : null}
+        label="Email Address" />
+
         <div class = "spaceTop">
-        <Link to = "/">
-                <Button className = "button bartenderButton">Register</Button>
+        <Link to = "/addBartender">
+                <Button onClick = {registerButton} className = "button bartenderButton">Register</Button>
         </Link>
         </div>
         </div>

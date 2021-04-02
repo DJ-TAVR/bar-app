@@ -168,7 +168,7 @@ export default function Stickers(props) {
     return(
         <div class ="row">
             <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken} />
-            <div class = "stay wide center">
+            <div class = "stay widex center">
 
             <h1 class = "Table_Text">Manage Stickers</h1>
             <div class = "tableDiv">
