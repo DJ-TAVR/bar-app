@@ -8,7 +8,7 @@ export default function AdminSelect(props){
 
     return(
     <div class = "row">
-    <CustomSidebar/>
+    <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
     <div class = "stay wide center">
             <img src={logo}/>
             <p/>

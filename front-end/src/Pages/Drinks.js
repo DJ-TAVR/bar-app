@@ -34,7 +34,7 @@ export default function Inventory(props) {
 
     return(
         <div className="row">
-        <CustomSidebar/>
+        <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
         <div class = "stay wide center">
             <div class = "tableDiv">
         {/* <h1 class = "Table_Text"> Inventory Insights </h1>

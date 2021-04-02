@@ -43,30 +43,30 @@ function App() {
     <BrowserRouter>
     <Switch>
       <Route path ="/register">
-        <Registration userType = {userType} handleUserType = {handleUserType}/>
+        <Registration isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path="/admin">
-        <AdminSelect userType = {userType} handleUserType = {handleUserType}/>
+        <AdminSelect isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path="/bartender">
-        <Bartender userType = {userType} handleUserType = {handleUserType}/>
+        <Bartender isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path="/addBartender">
-        <AddBartender userType = {userType} handleUserType = {handleUserType}/>
+        <AddBartender isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path = "/drinks">
-        <Drinks userType = {userType} handleUserType = {handleUserType}/>
+        <Drinks isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path = "/stickers">
-        <Stickers csrfToken = {csrfToken} userType = {userType} handleUserType = {handleUserType}/>
+        <Stickers isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path="/registration">
-        <Registration csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
+        <Registration isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       <Route path = "/help">
-        <Help />
+        <Help isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} />
       </Route>
-      <Route path="/">
+      <Route >
         <Login isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>
       </Route>
       

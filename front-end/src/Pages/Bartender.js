@@ -202,7 +202,7 @@ export default function Bartender(props) {
     return(
             (!showTable && (
             <div class = "row">
-            <CustomSidebar/>
+            <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
             <div class = "stay wide center">
             <p/>
             <p/>
@@ -373,7 +373,7 @@ export default function Bartender(props) {
             </div>
     ) || showTable && (
         <div class = "row">
-            <CustomSidebar/>
+            <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
             <div class = "stay wide center">
             <h1 className = "Table_Text"> Bartender Insights </h1>
             <br/>

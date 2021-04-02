@@ -8,7 +8,7 @@ export default function Help(props){
 
     return(
         <div class = "row">
-        <CustomSidebar/>
+        <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
         <div class = "stay center">
         <h1 className = "Table_Text"> Help </h1>
         <h1 className = "Table_Text"> Use the sidebar to navigate through this application. </h1>

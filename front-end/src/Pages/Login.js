@@ -26,7 +26,7 @@ export default function Login(props){
     const [authenticated, setAuthenticated] = React.useState(0);
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/session/", {
+        fetch("http://localhost:8000/account/session/", {
             credentials: "include",
           })
           .then((res) => res.json())
@@ -42,7 +42,8 @@ export default function Login(props){
           .catch((err) => {
             console.log(err);
           });
-    }, [])
+    }
+    , [])
 
     const classes = useStyles();
 
@@ -88,17 +89,22 @@ export default function Login(props){
         </div>
         ))||
         (props.isAuth &&
-            <h1>already logged in</h1>
+            <div class = "wide">
+                <h1>Would you like to log out of your current account?</h1>
+                <Button onClick = {logoutButton}>Logout</Button>
+                <Link to = "/admin"><Button>Stay Logged In</Button></Link>
+            </div>
         )
     )
 
     function getCSRF(){
-        fetch("http://localhost:8000/api/csrf/", {
+        fetch("http://localhost:8000/csrf/", {
             credentials: "include",
           })
           .then((res) => {
             let csrfToken = res.headers.get("X-CSRFToken");
             props.setCSRFToken(csrfToken);
+            props.setIsAuth(false)
             console.log("csrf retrieved: " , csrfToken);
           })
           .catch((err) => {
@@ -113,6 +119,7 @@ export default function Login(props){
     function handlePass(e){
         setPass(e.target.value)
     }
+    
     // function getCookie(name) {
     //     let cookieValue = null;
     //     if (document.cookie && document.cookie !== '') {
@@ -126,8 +133,32 @@ export default function Login(props){
     //             }
     //         }
     //     }
+    //     console.log(cookieValue);
     //     return cookieValue;
     // }
+
+    function logoutButton(){
+        fetch("http://localhost:8000/account/logout/", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "X-CSRFToken": props.csrfToken ,
+                "Content-Type": "application/json"
+            },
+        })
+        .then((res) => {
+            console.log(res)
+            if(res.status == 200){
+                setAuthenticated(0)
+                getCSRF();
+            }
+        })
+        .catch((err)=> {
+            console.error(err)
+        });
+        // setLogged(false)
+        // console.log(props.csrfToken)
+    }
 
     function loginButton(){
         fetch("http://localhost:8000/account/login/", {
@@ -142,6 +173,7 @@ export default function Login(props){
         .then((res) => {
             if (res.status == 200) {
                 setAuthenticated(1);
+                getCSRF();
             } else {
                 setAuthenticated(2);
             }
@@ -150,5 +182,6 @@ export default function Login(props){
         .catch((err)=> {
             console.error(err);
         });
+        // console.log(props.csrfToken)
     }
 }

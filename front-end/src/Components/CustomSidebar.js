@@ -11,10 +11,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 
 
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 
 export default function CustomSidebar(props){
+
+    const [logged, setLogged] = React.useState(true)
+
 
     return(
     <div class = "follow">
@@ -35,20 +38,10 @@ export default function CustomSidebar(props){
         </SidebarContent>
         <SidebarFooter>
             <Menu>
-                <MenuItem onClick = {logoutButton}><Link to = "/">Logout</Link></MenuItem>
+                <MenuItem><Link to = "/login">Logout</Link></MenuItem>
             </Menu>
         </SidebarFooter>
       </ProSidebar>
     </div>
     )
-
-    function logoutButton(){
-        fetch("http://localhost:8000/logout/")
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((err)=> {
-            console.error(err)
-        });
-    }
 }
