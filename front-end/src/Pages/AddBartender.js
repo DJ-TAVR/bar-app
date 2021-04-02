@@ -137,7 +137,7 @@ export default function AddBartender(props) {
             <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken} />
             <div class = "stay wide center">
 
-            <h1 class = "Table_Text">Add Bartender</h1>
+            <h1 class = "Table_Text">Manage Employees</h1>
             <div class = "tableDiv">
             <Table {...getTableProps()} className = "Table-header" id="bartenders">
                 <colgroup>

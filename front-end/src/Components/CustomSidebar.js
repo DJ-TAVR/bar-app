@@ -26,12 +26,14 @@ export default function CustomSidebar(props){
         <Menu iconShape = "square">
           <MenuItem class = "normal"></MenuItem>
 
-          <SubMenu title = "Statistics">
+          <SubMenu title = "Insights">
+            <MenuItem><Link to = "/drinks">Inventory</Link></MenuItem>
             <MenuItem><Link to = "/bartender">Bartender</Link></MenuItem>
-            <MenuItem><Link to = "/drinks">Drinks</Link></MenuItem>
           </SubMenu>
-          <MenuItem><Link to = "/stickers">Stickers</Link></MenuItem>
-          <MenuItem><Link to = "/addBartender">Employees</Link></MenuItem>
+          <SubMenu title = "Management">
+            <MenuItem><Link to = "/stickers">Stickers</Link></MenuItem>
+            <MenuItem><Link to = "/addBartender">Employees</Link></MenuItem>
+          </SubMenu>
           {/* <MenuItem><Link to = "/registration">Registration</Link></MenuItem> */}
           <MenuItem><Link to = "/help">Help</Link></MenuItem>
         </Menu>
