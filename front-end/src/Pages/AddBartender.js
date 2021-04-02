@@ -79,26 +79,26 @@ export default function AddBartender(props) {
         .then(obj => setData(obj.body));
     }
 
-    function addBartender() {
-        fetch("127.0.0.1:8000/account/create_bartender/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                first_name: "test",
-                last_name: "test",
-                email: "abc@gmail.com",
+    // function addBartender() {
+    //     fetch("127.0.0.1:8000/account/create_bartender/", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         credentials: "include",
+    //         body: JSON.stringify({
+    //             first_name: "test",
+    //             last_name: "test",
+    //             email: "abc@gmail.com",
             
-            })
-        })
-        .then((res) => {
-            console.log(res)
-        }).then(() =>{
-            updateTable();
-        })
-    }
+    //         })
+    //     })
+    //     .then((res) => {
+    //         console.log(res)
+    //     }).then(() =>{
+    //         updateTable();
+    //     })
+    // }
 
     function removeBartender() {
         let lastRow = document.getElementById("bartenders").rows;
@@ -174,11 +174,11 @@ export default function AddBartender(props) {
                 </tbody>
             </Table>
             </div>
-            <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button>
+            {/* <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button> */}
             {/* Demonstration Commands */}
-            <Button onClick={addBartender}>Add Bartender</Button>
+            <Link to = "/registration"><Button>Add Bartender</Button></Link>
             <br/>
-            <Button onClick={removeBartender}>Remove Bartender</Button>
+            <Button onClick = {removeBartender}>Remove Bartender</Button>
         </div>
         </div>
     )

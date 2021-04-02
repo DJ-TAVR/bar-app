@@ -5,6 +5,7 @@ import {TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
+import CustomSidebar from '../Components/CustomSidebar';
 
 const useStyles = makeStyles({
     root: {
@@ -17,7 +18,9 @@ const useStyles = makeStyles({
 export default function Registration(props) {
     const classes = useStyles();
     return(
-        <div class="wide">
+        <div class="row">
+            <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken}/>
+            <div class = "stay wide center">
         <h1> BarIQ </h1>
         
         <TextField className = {classes.root}
@@ -64,6 +67,7 @@ export default function Registration(props) {
         <Link to = "/">
                 <Button className = "button bartenderButton">Register</Button>
         </Link>
+        </div>
         </div>
       </div>
     )

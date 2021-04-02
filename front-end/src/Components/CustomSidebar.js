@@ -30,9 +30,9 @@ export default function CustomSidebar(props){
             <MenuItem><Link to = "/bartender">Bartender</Link></MenuItem>
             <MenuItem><Link to = "/drinks">Drinks</Link></MenuItem>
           </SubMenu>
-          <MenuItem><Link to = "/stickers">Manage Stickers</Link></MenuItem>
-          <MenuItem><Link to = "/addBartender">Add Bartender</Link></MenuItem>
-          <MenuItem><Link to = "/registration">Registration</Link></MenuItem>
+          <MenuItem><Link to = "/stickers">Stickers</Link></MenuItem>
+          <MenuItem><Link to = "/addBartender">Employees</Link></MenuItem>
+          {/* <MenuItem><Link to = "/registration">Registration</Link></MenuItem> */}
           <MenuItem><Link to = "/help">Help</Link></MenuItem>
         </Menu>
         </SidebarContent>

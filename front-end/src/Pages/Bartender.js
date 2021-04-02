@@ -44,7 +44,7 @@ export default function Bartender(props) {
 
     const classes = useStyles();
 
-    const [showTable, setShowTable] = React.useState(true)
+    const [showTable, setShowTable] = React.useState(false)
     const [chartData, setChartData] = React.useState({
         average_mlpp:5,
         cumulative_mlpp:0,
@@ -257,7 +257,7 @@ export default function Bartender(props) {
                 </div>
                 <p/>
             </div>
-            <Button>Switch to Shift Table</Button>
+            <Button onClick = {toggle}>Switch to Shift Table</Button>
 
 
 
@@ -442,8 +442,14 @@ export default function Bartender(props) {
       </Table>
     </TableContainer>
                 </div>
+                <br/>
+                <Button onClick = {toggle}>Switch to Statistics</Button>
             </div>
         </div>
     ))
     )
+
+    function toggle(){
+        setShowTable(!showTable);
+    }
 }
