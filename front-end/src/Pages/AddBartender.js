@@ -3,17 +3,37 @@ import React, {useState, useEffect} from "react";
 import Table from 'react-bootstrap/Table'
 import { Button } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom'
-import { useTable, useSortBy } from 'react-table'
+import { useTable, useSortBy, useRowSelect } from 'react-table'
 import CustomSidebar from "../Components/CustomSidebar"
+
 var selector = 0;
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 export default function AddBartender(props) {
     const [data, setData] = React.useState([]);
 
-    const columns = React.useMemo(() => [{
+    const columns = React.useMemo(() => [{ 
+        Header: "Bartender ID",
+        accessor: "bartender_id" 
+    },{
         Header: "First Name",
         accessor: "first_name" 
-    }, {
+    },  {
         Header: "Last Name",
         accessor: "last_name",
     }, {
@@ -25,23 +45,28 @@ export default function AddBartender(props) {
     function editData(e) {
         const el = e.target;
         const index = Array.prototype.indexOf.call(el.parentNode.children, el);
-        const th = document.querySelector('#bartender th:nth-child(' + (index+1) + ')');
+        const th = document.querySelector('#stickers th:nth-child(' + (index+1) + ')');
         selector += 1;
         if (!th.textContent.includes("Bartender ID")) {
-            el.innerHTML = "<input class='BartenderInput' id='n" + selector + "' value='" + el.textContent + "'> </input>";
+            el.innerHTML = "<input class='StickerInput' id='n" + selector + "' value='" + el.textContent + "'> </input>";
             document.getElementById("n"+selector).focus();
+            document.getElementById("submitChanges").style.visibility = "visible";
         }
-        document.getElementById("submitChanges").style.visibility = "visible";
     }
     
     function submit() {
-        const table = document.getElementById("bartender");
+        let csrf = getCookie('csrftoken');
+        const table = document.getElementById("stickers");
+        let removals = [];
         selector = 0;
         for (let i = 1, row; row = table.rows[i]; i++) {
-            let changes = []
+            let changes = [];
             let changeHappens = false;
-            for (var j = 0, col; col = row.cells[j]; j++) {
-                if (col.firstChild.className == "BartenderInput") {
+            if (row.cells[0].firstChild.checked) {
+                removals.push(row.cells[1].innerHTML)
+            }
+            for (var j = 1, col; col = row.cells[j]; j++) {
+                if (col.firstChild.className == "StickerInput") {
                     changes.push(col.firstChild.value)
                     col.innerHTML = col.firstChild.value
                     changeHappens = true;
@@ -50,17 +75,18 @@ export default function AddBartender(props) {
                 }
             }
             if (changeHappens) {
-                fetch("127.0.0.1:8000/account/update_bartender/", {
+                fetch("http://localhost:8000/account/update_bartender/", {
                     method: "POST",
                     headers: {
+                        "X-CSRFToken": csrf ,
                         "Content-Type": "application/json"
                     },
                     credentials: "include",
-                    bartender_id: changes[0],
                     body: JSON.stringify({
-                        first_name: changes[0],
-                        last_name: changes[1],
-                        email: changes[2],
+                        id: changes[0],
+                        first_name: changes[1],
+                        last_name: changes[2],
+                        email: changes[3],
                     })
                 })
                 .then((res) => {
@@ -68,56 +94,38 @@ export default function AddBartender(props) {
                 })
             }
         }
+        for (let i of removals) {
+            fetch("http://localhost:8000/account/delete_bartender/", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrf ,
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    id: i
+                })
+            }).then((res) => {
+                updateTable();
+                console.log(res)
+            })
+        }
         document.getElementById("submitChanges").style.visibility = "hidden";
     }
 
     function updateTable() {
-        
-        fetch(" 127.0.0.1:8000/account/get_bartenders/", {
+        fetch("http://localhost:8000/account/get_bartenders/", {
             credentials: "include"
         }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
-        .then(obj => setData(obj.body));
-    }
-
-    // function addBartender() {
-    //     fetch("127.0.0.1:8000/account/create_bartender/", {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //         credentials: "include",
-    //         body: JSON.stringify({
-    //             first_name: "test",
-    //             last_name: "test",
-    //             email: "abc@gmail.com",
-            
-    //         })
-    //     })
-    //     .then((res) => {
-    //         console.log(res)
-    //     }).then(() =>{
-    //         updateTable();
-    //     })
-    // }
-
-    function removeBartender() {
-        let lastRow = document.getElementById("bartenders").rows;
-        let lastID = lastRow[lastRow.length - 1].children[0].innerText;
-        fetch("127.0.0.1:8000/account/delete_bartender/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                bartender_id: lastID,
-            })
-        })
-        .then((res) => {
-            console.log(res)
-        }).then(() =>{
-            updateTable();
-        })
+        .then(obj => {
+            let displayData = [];
+            for (let i of obj.body) {
+                let lone = i.account;
+                lone.bartender_id = i.id;
+                displayData.push(lone);
+            }
+            setData(displayData);
+        });
     }
     
     useEffect(() => {
@@ -130,16 +138,28 @@ export default function AddBartender(props) {
         headerGroups,
         rows,
         prepareRow,
-    } = useTable({ columns, data }, useSortBy);
+    } = useTable({ columns, data }, useSortBy, useRowSelect,
+        hooks => {
+            hooks.visibleColumns.push(columns => [
+              {
+                id: 'remove',
+                Header: "Remove?",
+                Cell: ({ row }) => (
+                    <input type="checkbox" class = "checkbox"/>
+                ),
+              },
+              ...columns,
+            ])
+          });
 
     return(
         <div class ="row">
             <CustomSidebar isAuth = {props.isAuth} setIsAuth = {props.setIsAuth} csrfToken = {props.csrfToken} setCSRFToken = {props.setCSRFToken} />
-            <div class = "stay wide center">
+            <div class = "stay widex center">
 
-            <h1 class = "Table_Text">Manage Employees</h1>
+            <h1 class = "Table_Text">Manage Bartenders</h1>
             <div class = "tableDiv">
-            <Table {...getTableProps()} className = "Table-header" id="bartenders">
+            <Table {...getTableProps()} className = "Table-header" id="stickers">
                 <colgroup>
                     <col class = "green"/>
                 </colgroup>
@@ -174,11 +194,9 @@ export default function AddBartender(props) {
                 </tbody>
             </Table>
             </div>
-            {/* <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button> */}
-            {/* Demonstration Commands */}
             <Link to = "/registration"><Button>Add Bartender</Button></Link>
             <br/>
-            <Button onClick = {removeBartender}>Remove Bartender</Button>
+            <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button>
         </div>
         </div>
     )

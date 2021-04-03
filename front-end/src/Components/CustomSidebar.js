@@ -32,7 +32,7 @@ export default function CustomSidebar(props){
           </SubMenu>
           <SubMenu title = "Management">
             <MenuItem><Link to = "/stickers">Stickers</Link></MenuItem>
-            <MenuItem><Link to = "/addBartender">Employees</Link></MenuItem>
+            <MenuItem><Link to = "/addBartender">Bartenders</Link></MenuItem>
           </SubMenu>
           {/* <MenuItem><Link to = "/registration">Registration</Link></MenuItem> */}
           <MenuItem><Link to = "/help">Help</Link></MenuItem>

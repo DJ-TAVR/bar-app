@@ -4,7 +4,7 @@ import React, {useState, useEffect} from "react";
 import {TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import CustomSidebar from '../Components/CustomSidebar';
 
 const useStyles = makeStyles({
@@ -38,6 +38,7 @@ export default function Registration(props) {
     const [email, setEmail] = React.useState("");
 
     const classes = useStyles();
+    const history = useHistory();
 
     function handleFirst(e){
         setFirst(e.target.value)
@@ -64,6 +65,7 @@ export default function Registration(props) {
         })
         .then((res) => {
             console.log(res);
+            history.push('/addBartender');
         })
         .catch((err)=> {
             console.error(err);
@@ -108,9 +110,7 @@ export default function Registration(props) {
         label="Email Address" />
 
         <div class = "spaceTop">
-        <Link to = "/addBartender">
-                <Button onClick = {registerButton} className = "button bartenderButton">Register</Button>
-        </Link>
+        <Button onClick = {registerButton} className = "button bartenderButton">Register</Button>
         </div>
         </div>
       </div>

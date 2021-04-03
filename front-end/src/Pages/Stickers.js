@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom'
 import { useTable, useSortBy } from 'react-table'
 import CustomSidebar from "../Components/CustomSidebar"
+
 var selector = 0;
 
 export default function Stickers(props) {
@@ -51,8 +52,8 @@ export default function Stickers(props) {
         if (!th.textContent.includes("Sticker ID")) {
             el.innerHTML = "<input class='StickerInput' id='n" + selector + "' value='" + el.textContent + "'> </input>";
             document.getElementById("n"+selector).focus();
+            document.getElementById("submitChanges").style.visibility = "visible";
         }
-        document.getElementById("submitChanges").style.visibility = "visible";
     }
     
     function submit() {
