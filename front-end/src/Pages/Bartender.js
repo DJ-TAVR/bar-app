@@ -208,6 +208,43 @@ export default function Bartender(props) {
             <p/>
             <p/>
             <h1 className = "Table_Text"> Bartender Insights </h1>
+            <div>
+            <form>
+                <div class = "realRow">
+                <div class = "spaceRight">
+      <TextField
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="Start Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      <div>
+       <TextField
+      
+      defaultValue = "YYYY-MM-DD"
+        id="datetime-local"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps = {{
+            shrink: true,
+            className: classes.input
+        }}
+        InputProps={{
+            className: classes.input,
+        }}
+      />
+      </div>
+      </div>
+    </form>
+            </div>
             <br/>
             {/*onClick should lead to a popup to select time. Selecting time updates the data*/ }
             {/* <Button className = "filterButton" onClick={() => setChartData([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)])}>
@@ -382,6 +419,7 @@ export default function Bartender(props) {
             <form>
                 <div class = "realRow">
                 <div class = "spaceRight">
+                    
       <TextField
       defaultValue = "YYYY-MM-DD"
         id="datetime-local"
