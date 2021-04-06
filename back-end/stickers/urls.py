@@ -7,5 +7,6 @@ urlpatterns = [
     path('create/', views.create_sticker_view, name='api-create-stickers'),
     path('delete/', views.delete_sticker_view, name='api-delete-stickers'),
     path('update/', views.update_sticker_view, name = 'api-update-stickers'),
-    path('shifts_stats/', views.shifts_stats_view, name= 'api-shifts-stats')
+    path('shifts_stats/', views.shifts_stats_view, name= 'api-shifts-stats'),
+    path('get_shifts/', views.get_shifts_view, name= 'api-shifts-stats')
 ]
