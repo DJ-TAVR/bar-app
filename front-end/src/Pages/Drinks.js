@@ -23,8 +23,8 @@ const useStyles = makeStyles({
     },
     multilineColor:{
         color:'white'
-    }, 
-    
+    },
+
     input: {
         color: "white"
       },
@@ -65,7 +65,7 @@ export default function Drinks(props) {
         }
         return cookieValue;
     }
-    
+
     // Temp until API call
     function updateChartData() {
       setChartData({
@@ -105,7 +105,7 @@ export default function Drinks(props) {
           }, {
             brand: "Other",
             percent: 3
-        }] 
+        }]
       });
     }
 
@@ -207,7 +207,7 @@ export default function Drinks(props) {
             </div>
             <br/>
             <div className="Grid">
-              <Bar 
+              <Bar
                 className ="Chart"
                 data={overpourBar}
                 options={{
@@ -228,7 +228,7 @@ export default function Drinks(props) {
                     }]
                   }
               }}/>
-              <Doughnut 
+              <Doughnut
                 className ="Chart"
                 data={revenuePercent}
                 options={{
@@ -248,7 +248,7 @@ export default function Drinks(props) {
               </div>
               <div className="Statistic">
                 <p className="StatHeader">Total Revenue</p>
-                <p className="StatElement" style={{color: "#2ee29d"}}>{chartData.toal_revenue}</p>
+                <p className="StatElement" style={{color: "#2ee29d"}}>{ "$" + chartData.toal_revenue}</p>
               </div>
               <p/>
             </div>
