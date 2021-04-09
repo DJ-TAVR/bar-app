@@ -256,7 +256,7 @@ export default function Bartender(props) {
                 options={{
                     title:{
                         display:true,
-                        text:'Shifts with Greatest Overpouring Rates',
+                        text:'Shifts with Greatest Overpouring Instances',
                         fontSize:20,
                     },
                         legend:{
