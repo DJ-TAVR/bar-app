@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from django.shortcuts import redirect
 import json
-from .forms import StickerForm
+# from .forms import StickerForm
 from heapq import nlargest
 import heapq 
 from rest_framework.permissions import IsAuthenticated
