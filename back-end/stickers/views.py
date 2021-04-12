@@ -6,8 +6,7 @@ from .serializers import StickerSerializer
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.shortcuts import redirect
-import json
-# from .forms import StickerForm
+import json.encoder
 from heapq import nlargest
 import heapq 
 from rest_framework.permissions import IsAuthenticated
@@ -129,7 +128,6 @@ def find_top3_shifts_MLPP(list_of_shifts):
             heapq.heappush(heap, (overpour_percentage, shift))
         else:
             heapq.heappush(heap, (overpour_percentage, shift))
-    print(heap)
     return heap
 
 
