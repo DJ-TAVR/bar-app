@@ -24,4 +24,6 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     # route stickers app
     path('sticker/', include('stickers.urls')),
+    # inventory
+    path('inventory/', include('inventory.urls')),
 ]

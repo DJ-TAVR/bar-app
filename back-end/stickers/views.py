@@ -6,8 +6,7 @@ from .serializers import StickerSerializer
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.shortcuts import redirect
-import json
-from .forms import StickerForm
+import json.encoder
 from heapq import nlargest
 import heapq 
 from rest_framework.permissions import IsAuthenticated
@@ -129,7 +128,6 @@ def find_top3_shifts_MLPP(list_of_shifts):
             heapq.heappush(heap, (overpour_percentage, shift))
         else:
             heapq.heappush(heap, (overpour_percentage, shift))
-    print(heap)
     return heap
 
 
@@ -192,26 +190,28 @@ def shifts_stats_view(request):
             except:
                 return Response(None, status=400)
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def get_shifts_view(request):
-#     user = request.user
-#     if check_bar_manager_access(user):
-#         if request.method == 'GET':
-#             # not sure what to put here
-#             return get_all_stickers(user)
-#         elif request.method == 'POST':
-#             try:
-#                 list_of_shifts = get_list_of_shifts(request)
-#                 # construct response
-#                 shifts = []
-#                 for shift in list_of_shifts:
-#                     data = {
-#                         'start_time': shift.start_time.strftime("%Y-%m-%d %H:%M:%S"),
-#                         'end_time': shift.end_time.strftime("%Y-%m-%d %H:%M:%S"),
-#                         'percentage_overpour': percentage_overpour
-#                     }
-#                     shifts.append(data)
-#                 return Response(shifts, status=200)
-#             except:
-#                 return Response(None, status=400)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_shifts_view(request):
+    user = request.user
+    if check_bar_manager_access(user):
+        if request.method == 'GET':
+            # not sure what to put here
+            return get_all_stickers(user)
+        elif request.method == 'POST':
+            try:
+                list_of_shifts = get_list_of_shifts(request)
+                # construct response
+                shifts = []
+                for shift in list_of_shifts:
+                    overpour_percentage = 100 * (shift.average_mlpp / shift.target if shift.target != 0 else 0)
+                    data = {
+                        'start_time': shift.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                        'end_time': shift.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+                        'percentage_overpour': overpour_percentage,
+                        'overpouring_count': shift.overpouring_count,
+                    }
+                    shifts.append(data)
+                return Response(shifts, status=200)
+            except:
+                return Response(None, status=400)
