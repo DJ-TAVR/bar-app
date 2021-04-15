@@ -75,6 +75,10 @@ img {
   background-color: #1f1f1f;
 }
 
+.spaceLeft {
+  margin-left: 15px;
+}
+
 .realRow {
   display: inline-flex;
 }

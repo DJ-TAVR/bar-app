@@ -44,6 +44,8 @@ export default function Bartender(props) {
 
     const classes = useStyles();
 
+    const [startDate, setStartDate] = React.useState("2021-03-15 02:00:00")
+    const [endDate, setEndDate] = React.useState("2021-03-22 08:00:00")
     const [showTable, setShowTable] = React.useState(false)
     const [chartData, setChartData] = React.useState({
         average_mlpp:5,
@@ -137,7 +139,6 @@ export default function Bartender(props) {
         return cookieValue;
     }
 
-    // Doesn't currently work
     function updateChartData() {
         let csrf = getCookie('csrftoken');
         fetch("http://localhost:8000/sticker/shifts_stats/", {
@@ -148,11 +149,19 @@ export default function Bartender(props) {
             },
             credentials: "include",
             body: JSON.stringify({
-                start_time: "2021-03-15 02:00:00", //change these based on filter input
-                end_time: "2021-03-22 08:00:00"
+                start_time: startDate,
+                end_time: endDate
             })
-        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
-        .then(obj => console.log(obj.body));
+        }).then(r =>  
+            r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => {
+            setChartData({
+                average_mlpp: obj.body.average_mlpp,
+                cumulative_mlpp: obj.body.cumulative_mlpp,
+                top3_MLPP: obj.body.top3_MLPP,
+                over_pouring_percentage: obj.body.over_pouring_percentage
+            })
+        });
     }
 
     function updateTableData() {
@@ -217,6 +226,7 @@ export default function Bartender(props) {
         id="datetime-local"
         label="Start Date"
         type="datetime-local"
+        onChange = {(e) => handleStartDate(e)}
         InputLabelProps = {{
             shrink: true,
             className: classes.input
@@ -233,6 +243,7 @@ export default function Bartender(props) {
         id="datetime-local"
         label="End Date"
         type="datetime-local"
+        onChange = {(e) => handleEndDate(e)}
         InputLabelProps = {{
             shrink: true,
             className: classes.input
@@ -241,6 +252,7 @@ export default function Bartender(props) {
             className: classes.input,
         }}
       />
+      <Button className = "spaceLeft" onClick = {confirmChanges}>Confirm Dates</Button>
       </div>
       </div>
     </form>
@@ -296,116 +308,6 @@ export default function Bartender(props) {
             </div>
             <Button onClick = {toggle}>Switch to Shift Table</Button>
 
-
-
-
-
-
-
-            {/* <Table {...getTableProps()} className = "Table-header">
-                <colgroup>
-                    <col class = "green"/>
-                </colgroup>
-                <thead> {
-                    headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}> {
-                            headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {column.isSorted ? column.isSortedDesc ? '▲' : '▼': ''}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody {...getTableBodyProps()}> {
-                    rows.map(row => {
-                        prepareRow(row);
-                        return (
-                        <tr {...row.getRowProps()}> {
-                                row.cells.map(cell => {
-                                    return (
-                                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                    );
-                                })}
-                        </tr>)
-                    })}
-                </tbody>
-            </Table> */}
-
-
-
-
-
-
-                               {/* <div class = "tableDiv">
-            <div>
-            <form>
-                <div class = "realRow">
-                <div class = "spaceRight">
-      <TextField
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="Start Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-            className: classes.input
-        }}
-        InputProps={{
-            className: classes.input,
-        }}
-      />
-      </div>
-      <div>
-       <TextField
-      
-      defaultValue = "YYYY-MM-DD"
-        id="datetime-local"
-        label="End Date"
-        type="datetime-local"
-        InputLabelProps = {{
-            shrink: true,
-            className: classes.input
-        }}
-        InputProps={{
-            className: classes.input,
-        }}
-      />
-      </div>
-      </div>
-    </form>
-            </div>
-                <TableContainer component={Paper}>
-      <Table className={classes.table} style ={{backgroundColor:"#2ee29d"}} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align = "center">Shift Start</TableCell>
-            <TableCell align = "center">Shift End</TableCell>
-            <TableCell align="right">Bartenders Present(g)</TableCell>
-            <TableCell align="right">Liters Overpoured</TableCell>
-            <TableCell align="right"># Overpouring Instances</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row" align = "center">
-                {row.start}
-              </TableCell>
-              <TableCell align="center">{row.end}</TableCell>
-              <TableCell align="right">{row.presence}</TableCell>
-              <TableCell align="right">{row.liters}</TableCell>
-              <TableCell align="right">{row.instances}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-                </div> */}
-
-
-
             </div>
             </div>
     ) || showTable && (
@@ -449,6 +351,7 @@ export default function Bartender(props) {
             className: classes.input,
         }}
       />
+      <Button onClick = {confirmChanges}>Confirm Dates</Button>
       </div>
       </div>
     </form>
@@ -486,6 +389,20 @@ export default function Bartender(props) {
         </div>
     ))
     )
+
+    function handleStartDate(e){
+        var dateVal = e.target.value.replaceAll("T", " ")
+        setStartDate(dateVal)
+    }
+
+    function handleEndDate(e){
+        var dateVal = e.target.value.replaceAll("T", " ")
+        setEndDate(dateVal)
+    }
+
+    function confirmChanges(){
+        updateChartData()
+    }
 
     function toggle(){
         setShowTable(!showTable);
