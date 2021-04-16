@@ -221,8 +221,6 @@ def get_shifts_view(request):
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def calculate_revenue_from_pouring_instances_view(request):
-    
-    
     user = request.user
     if request.method == 'GET':
         return Response(None, status=200)
@@ -253,28 +251,32 @@ def calculate_revenue_from_pouring_instances_view(request):
 @permission_classes([IsAuthenticated])
 #Make the sticker.target a required field on the frontend!
 def get_five_most_overpoured_drinks_view(request):
-    print("Line 244")
-    uniqueDrinks = {}
-    try:
-        for obj in PouringInstance.objects.all():
-            if obj.sticker.drink.name not in uniqueDrinks:
-                if (obj.volume_poured - obj.sticker.target > 0):
-                    uniqueDrinks[obj.sticker.drink.name] = float(obj.volume_poured - obj.sticker.target)
-                else:
-                    uniqueDrinks[obj.sticker.drink.name] = 0
-            else:
-                if (obj.volume_poured - obj.sticker.target > 0):
-                    uniqueDrinks[obj.sticker.drink.name] += float(obj.volume_poured - obj.sticker.target)
-                else:
-                    uniqueDrinks[obj.sticker.drink.name] += 0
-        
-        K = len(uniqueDrinks)
-        #returnDict is a dictionary sorted by overpouring values by highest values. 
-        #Return all overpoured drinks sorted in reverse order if K < 5. Else return the top 5 overpoured drinks
-        returnDict = dict(sorted(uniqueDrinks.items(), key = itemgetter(1), reverse=True)[:K])
-        if len(uniqueDrinks) > 5:
-            K = 5
-            returnDict = dict(sorted(uniqueDrinks.items(), key = itemgetter(1), reverse=True)[:K])
-        return Response(returnDict, status = 200)
-    except:
-        return Response(None, status = 400)
+    user = request.user
+    if request.method == 'GET':
+        return Response(None, status=200)
+    elif request.method == 'POST':
+        if ("start_time" in request.data and "end_time" in request.data):
+            uniqueDrinks = {}
+            try:
+                for obj in PouringInstance.objects.filter(start_time__range = (request.data["start_time"], request.data["end_time"]), end_time__range = (request.data["start_time"], request.data["end_time"])):
+                    if obj.sticker.drink.name not in uniqueDrinks:
+                        if (obj.volume_poured - obj.sticker.target > 0):
+                            uniqueDrinks[obj.sticker.drink.name] = float(obj.volume_poured - obj.sticker.target)
+                        else:
+                            uniqueDrinks[obj.sticker.drink.name] = 0
+                    else:
+                        if (obj.volume_poured - obj.sticker.target > 0):
+                            uniqueDrinks[obj.sticker.drink.name] += float(obj.volume_poured - obj.sticker.target)
+                        else:
+                            uniqueDrinks[obj.sticker.drink.name] += 0
+                
+                K = len(uniqueDrinks)
+                returnDict = dict(sorted(uniqueDrinks.items(), key = itemgetter(1), reverse=True)[:K])
+                if len(uniqueDrinks) > 5:
+                    K = 5
+                    returnDict = dict(sorted(uniqueDrinks.items(), key = itemgetter(1), reverse=True)[:K])
+                return Response(returnDict, status = 200)
+            except:
+                return Response(None, status = 400)
+        else:
+            return Response("start_time and/or end_time missing", status = 400)
