@@ -11,6 +11,7 @@ from heapq import nlargest
 import heapq 
 from rest_framework.permissions import IsAuthenticated
 from operator import itemgetter
+import datetime
 
 
 # Stickers
@@ -217,29 +218,38 @@ def get_shifts_view(request):
             except:
                 return Response(None, status=400)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def calculate_revenue_from_pouring_instances_view(request):
-    #print("Line 222")
-    actualDrinkVals = []
-    expectedDrinkVals = []
-    for obj in PouringInstance.objects.all():
-        actualDrinkVals.append(obj.sticker.drink.unit_price * obj.volume_poured)
-        expectedDrinkVals.append(obj.sticker.drink.revenue)
-    totalLostRevenue = 0
-    if sum(actualDrinkVals) - sum(expectedDrinkVals) > 0:
-        totalLostRevenue = sum(actualDrinkVals) - sum(expectedDrinkVals)
-    try:
-        sumActualDrinkVals = sum(actualDrinkVals)
-        returnVal = {
-            'valueOfDrinksPoured': "$" + str(round(sumActualDrinkVals, 2)),
-            'totalLostRevenue': "$" + str(round(totalLostRevenue, 2)),
-        }
-        return Response(returnVal, status = 200)
-    except:
-        return Response(None, status = 400)
+    
+    
+    user = request.user
+    if request.method == 'GET':
+        return Response(None, status=200)
+    elif request.method == 'POST':
+        if ("start_time" in request.data and "end_time" in request.data):
+            actualDrinkVals = []
+            expectedDrinkVals = []
+            for obj in PouringInstance.objects.filter(start_time__range = (request.data["start_time"], request.data["end_time"]), end_time__range = (request.data["start_time"], request.data["end_time"])):
+                actualDrinkVals.append(obj.sticker.drink.unit_price * obj.volume_poured)
+                expectedDrinkVals.append(obj.sticker.drink.revenue)
+            totalLostRevenue = 0
+            if sum(actualDrinkVals) - sum(expectedDrinkVals) > 0:
+                totalLostRevenue = sum(actualDrinkVals) - sum(expectedDrinkVals)
+            try:
+                sumActualDrinkVals = sum(actualDrinkVals)
+                returnVal = {
+                    'valueOfDrinksPoured': "$" + str(round(sumActualDrinkVals, 2)),
+                    'totalLostRevenue': "$" + str(round(totalLostRevenue, 2)),
+                }
+                return Response(returnVal, status = 200)
+            except:
+                return Response(None, status = 400)
+        else:
+            return Response("start_time and/or end_time missing", status = 400)
 
-@api_view(['GET'])
+
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 #Make the sticker.target a required field on the frontend!
 def get_five_most_overpoured_drinks_view(request):
