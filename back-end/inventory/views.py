@@ -29,5 +29,11 @@ def get_drink_with_lowest_quantity(request):
     serialized_drinks = DrinkSerializer(drinks, many=True)
     return Response(serialized_drinks.data, status=200)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def get_drink_with_quantity_range(request):
-    pass
+    max_quantity = request.data['max_quantity']
+    min_quantity = request.data['min_quantity']
+    drinks = Drink.objects.filter(quantity__range=(min_quantity, max_quantity))
+    serialized_drinks = DrinkSerializer(drinks, many=True)
+    return Response(serialized_drinks.data, status=200)
