@@ -33,6 +33,7 @@ def create_sticker_view(request):
             correct_bar = Bar.objects.get(manager=user)
             serializer = StickerSerializer(data=request.data)
             print("Line 35")
+            print(request.data)
             if serializer.is_valid():
                 print("37")
                 instance = serializer.save(bar=correct_bar)
@@ -58,10 +59,10 @@ def update_sticker_view(request):
                     stickerInTable = 1
             if stickerInTable == 1:
                 object_to_update = Sticker.objects.get(pk=request.data['sticker_id'])
-                object_to_update.drink = request.data['drink']
+                #object_to_update.drink = request.data['drink']
                 object_to_update.mlpp = request.data['mlpp']
                 object_to_update.target = request.data['target']
-                #object_to_update.price = request.data['price']
+                #object_to_update.bar = request.data['bar']
                 object_to_update.save()
 
                 return JsonResponse({'detail': 'Successfully Updated Sticker!'}, status=200)
@@ -166,7 +167,7 @@ def get_list_of_shifts(request):
 
 
 # endpoint
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def shifts_stats_view(request):
     user = request.user
@@ -196,7 +197,7 @@ def shifts_stats_view(request):
             except:
                 return Response(None, status=400)
 
-@api_view(['POST'])
+@api_view(['GET','POST'])
 @permission_classes([IsAuthenticated])
 def get_shifts_view(request):
     user = request.user
