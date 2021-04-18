@@ -29,11 +29,15 @@ def create_sticker_view(request):
         if request.method == 'GET':
             return get_all_stickers(user)
         elif request.method == 'POST':
+            print("Working here")
             correct_bar = Bar.objects.get(manager=user)
             serializer = StickerSerializer(data=request.data)
+            print("Line 35")
             if serializer.is_valid():
+                print("37")
                 instance = serializer.save(bar=correct_bar)
                 instance.save()
+                print("40")
                 return JsonResponse({'detail': 'Successfully created stickers'}, status=200)
             else:
                 return JsonResponse({'detail': 'Failed to create new sticker.'}, status=400)
@@ -54,10 +58,10 @@ def update_sticker_view(request):
                     stickerInTable = 1
             if stickerInTable == 1:
                 object_to_update = Sticker.objects.get(pk=request.data['sticker_id'])
-                object_to_update.drink_name = request.data['drink_name']
-                object_to_update.drink_type = request.data['drink_type']
-                object_to_update.drink_size = request.data['drink_size']
-                object_to_update.price = request.data['price']
+                object_to_update.drink = request.data['drink']
+                object_to_update.mlpp = request.data['mlpp']
+                object_to_update.target = request.data['target']
+                #object_to_update.price = request.data['price']
                 object_to_update.save()
 
                 return JsonResponse({'detail': 'Successfully Updated Sticker!'}, status=200)
