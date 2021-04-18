@@ -189,10 +189,10 @@ def shifts_stats_view(request):
                     data = {
                         'start_time': shift.start_time.strftime("%Y-%m-%d %H:%M:%S"),
                         'end_time': shift.end_time.strftime("%Y-%m-%d %H:%M:%S"),
-                        'percentage_overpour': percentage_overpour
+                        'percentage_overpour': 100 * percentage_overpour
                     }
                     stats['top3_MLPP'].append(data)
-                stats['over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
+                stats['cumulative_over_pouring_percentage'] = calculate_over_pouring_percentage(list_of_shifts)
                 return Response(stats, status=200)
             except:
                 return Response(None, status=400)
