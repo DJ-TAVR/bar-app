@@ -154,11 +154,15 @@ def get_list_of_shifts(request):
     if group in user.groups.all():
         shifts = Shift.objects.filter(bar=correct_bar)
     print(shifts)
+    print(start_time)
+    print(end_time)
     for shift in shifts:
+        print(shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time)
+        print(shift.end_time.strftime("%Y-%m-%d %H:%M:%S") <= end_time)
         if shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time and shift.end_time.strftime(
                 "%Y-%m-%d %H:%M:%S") <= end_time:
             filtered_shifts.append(shift)
-    return shifts
+    return filtered_shifts
 
 
 # endpoint
