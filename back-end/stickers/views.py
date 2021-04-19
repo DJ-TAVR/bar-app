@@ -29,16 +29,11 @@ def create_sticker_view(request):
         if request.method == 'GET':
             return get_all_stickers(user)
         elif request.method == 'POST':
-            print("Working here")
             correct_bar = Bar.objects.get(manager=user)
             serializer = StickerSerializer(data=request.data)
-            print("Line 35")
-            print(request.data)
             if serializer.is_valid():
-                print("37")
                 instance = serializer.save(bar=correct_bar)
                 instance.save()
-                print("40")
                 return JsonResponse({'detail': 'Successfully created stickers'}, status=200)
             else:
                 return JsonResponse({'detail': 'Failed to create new sticker.'}, status=400)
