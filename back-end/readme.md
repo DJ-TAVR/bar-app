@@ -144,7 +144,8 @@ Request body
             "drink_name": "sample drink name",
             "drink_type": "sample drink type",
             "drink size": 12,
-            "price": 99.00
+            "price": 99.00,
+            "target": 1.0
         }
     }
 

@@ -12,7 +12,7 @@ import heapq
 from rest_framework.permissions import IsAuthenticated
 from operator import itemgetter
 import datetime
-
+from inventory.models import Drink
 
 # Stickers
 @api_view(['GET'])
@@ -21,7 +21,7 @@ def get_stickers_view(request):
     return get_all_stickers(request.user)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_sticker_view(request):
     user = request.user
@@ -29,17 +29,24 @@ def create_sticker_view(request):
         if request.method == 'GET':
             return get_all_stickers(user)
         elif request.method == 'POST':
+            drink = Drink(name=request.data['drink_name'], 
+            type=request.data['drink_type'], 
+            size=request.data['drink_size'], 
+            price=request.data['price'])
+            drink.save()
+
             correct_bar = Bar.objects.get(manager=user)
             serializer = StickerSerializer(data=request.data)
             if serializer.is_valid():
-                instance = serializer.save(bar=correct_bar)
+                instance = serializer.save(bar=correct_bar, drink=drink)
+                instance.mlpp = 0
                 instance.save()
                 return JsonResponse({'detail': 'Successfully created stickers'}, status=200)
             else:
                 return JsonResponse({'detail': 'Failed to create new sticker.'}, status=400)
 
 
-@api_view(['GET', 'PUT'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_sticker_view(request):
     user = request.user
@@ -55,11 +62,16 @@ def update_sticker_view(request):
             if stickerInTable == 1:
                 object_to_update = Sticker.objects.get(pk=request.data['sticker_id'])
                 #object_to_update.drink = request.data['drink']
-                object_to_update.mlpp = request.data['mlpp']
                 object_to_update.target = request.data['target']
                 #object_to_update.bar = request.data['bar']
                 object_to_update.save()
 
+                drink = object_to_update.drink
+                drink.name = request.data['drink_name']
+                drink.size = request.data['drink_size']
+                drink.type = request.data['drink_type']
+                drink.price = request.data['price']
+                drink.save()
                 return JsonResponse({'detail': 'Successfully Updated Sticker!'}, status=200)
             else:
                 return JsonResponse({'detail': 'Failed to Update Sticker'}, status=400)
@@ -87,6 +99,7 @@ def get_all_stickers(user):
     correct_bar = Bar.objects.get(manager=user)
     if group in user.groups.all():
         stickers = Sticker.objects.filter(bar=correct_bar)
+        print(stickers)
         serialized_stickers = StickerSerializer(stickers, many=True)
         return Response(serialized_stickers.data, status=200)
     else:
@@ -153,12 +166,7 @@ def get_list_of_shifts(request):
     filtered_shifts = []
     if group in user.groups.all():
         shifts = Shift.objects.filter(bar=correct_bar)
-    print(shifts)
-    print(start_time)
-    print(end_time)
     for shift in shifts:
-        print(shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time)
-        print(shift.end_time.strftime("%Y-%m-%d %H:%M:%S") <= end_time)
         if shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time and shift.end_time.strftime(
                 "%Y-%m-%d %H:%M:%S") <= end_time:
             filtered_shifts.append(shift)
