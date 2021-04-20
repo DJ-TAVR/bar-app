@@ -161,6 +161,9 @@ export default function Bartender(props) {
                 top3_MLPP: obj.body.top3_MLPP,
                 over_pouring_percentage: obj.body.over_pouring_percentage
             })
+            console.log(obj.body)
+            console.log(startDate)
+            console.log(endDate)
         });
     }
 
@@ -351,7 +354,7 @@ export default function Bartender(props) {
             className: classes.input,
         }}
       />
-      <Button onClick = {confirmChanges}>Confirm Dates</Button>
+      <Button className = "spaceLeft" onClick = {confirmChanges}>Confirm Dates</Button>
       </div>
       </div>
     </form>
@@ -392,11 +395,13 @@ export default function Bartender(props) {
 
     function handleStartDate(e){
         var dateVal = e.target.value.replaceAll("T", " ")
+        dateVal = dateVal + ":00"
         setStartDate(dateVal)
     }
 
     function handleEndDate(e){
         var dateVal = e.target.value.replaceAll("T", " ")
+        dateVal = dateVal + ":00"
         setEndDate(dateVal)
     }
 

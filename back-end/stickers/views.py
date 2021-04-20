@@ -158,7 +158,7 @@ def get_list_of_shifts(request):
         if shift.start_time.strftime("%Y-%m-%d %H:%M:%S") >= start_time and shift.end_time.strftime(
                 "%Y-%m-%d %H:%M:%S") <= end_time:
             filtered_shifts.append(shift)
-    return shifts
+    return filtered_shifts
 
 
 # endpoint
