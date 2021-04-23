@@ -273,12 +273,20 @@ def get_five_most_overpoured_drinks_view(request):
                 for obj in PouringInstance.objects.filter(start_time__range = (request.data["start_time"], request.data["end_time"]), end_time__range = (request.data["start_time"], request.data["end_time"])):
                     if obj.sticker.drink.name not in uniqueDrinks:
                         if (obj.volume_poured - obj.sticker.target > 0):
-                            uniqueDrinks[obj.sticker.drink.name] = float(obj.volume_poured - obj.sticker.target)
+                            targetType = type(obj.sticker.target)
+                            if (targetType == float or targetType == int or targetType == complex):
+                                uniqueDrinks[obj.sticker.drink.name] = float(obj.volume_poured - obj.sticker.target)
+                            else:
+                                uniqueDrinks[obj.sticker.drink.name] = 0
                         else:
                             uniqueDrinks[obj.sticker.drink.name] = 0
                     else:
-                        if (obj.volume_poured - obj.sticker.target > 0):
-                            uniqueDrinks[obj.sticker.drink.name] += float(obj.volume_poured - obj.sticker.target)
+                        targetType = type(obj.sticker.target)
+                        if (targetType == float or targetType == int or targetType == complex):
+                            if (obj.volume_poured - obj.sticker.target > 0):
+                                uniqueDrinks[obj.sticker.drink.name] += float(obj.volume_poured - obj.sticker.target)
+                            else:
+                                uniqueDrinks[obj.sticker.drink.name] += 0
                         else:
                             uniqueDrinks[obj.sticker.drink.name] += 0
                 
