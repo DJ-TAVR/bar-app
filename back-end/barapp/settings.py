@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'barapp',
     'stickers',
+    'inventory',
 ]
 
 REST_FRAMEWORK = {

@@ -401,6 +401,18 @@ h1 {
   margin-left: -500px;
 }
 
+.Grid2 {
+  display: grid;
+  grid-column-gap: 3vw;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+  width: 475px;
+  height: 375px;
+  margin-left: -250px;
+  margin-top: -75px;
+}
+
 .Chart {
   display: grid;
   justify-items: center;
@@ -424,9 +436,28 @@ h1 {
   color: white;
 }
 
+.StatHeadTop {
+  font-size: 1vw;
+  text-align: center;
+  color: white;
+  margin-top: 5vw;
+  padding-bottom: -5vw;
+}
+
 .StatElement {
   font-size: 5vw;
   color: white;
   margin-top: -1vw;
   margin-bottom: -0.5vw;
+}
+
+.StatElmTop {
+  font-size: 2.5vw;
+  color: white;
+  margin-top: -1vw;
+}
+
+.up {
+  margin-top: 5vw !important;
+  margin-left: 5vw !important;
 }

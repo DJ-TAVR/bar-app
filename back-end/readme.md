@@ -144,7 +144,8 @@ Request body
             "drink_name": "sample drink name",
             "drink_type": "sample drink type",
             "drink size": 12,
-            "price": 99.00
+            "price": 99.00,
+            "target": 1.0
         }
     }
 
@@ -264,6 +265,33 @@ Request body
 Result
 {
     "error_message": "will_return_error_message_json_if_status_code_not_200"
+}
+
+if HTTP STATUS != 200, fail to delete bartender
+
+# get shifts
+method POST
+127.0.0.1:8000/sticker/get_shifts/
+
+Request body
+{
+    "start_time": "2021-03-16 02:00:15",
+    "end_time": "2021-03-18 22:01:04",
+}
+
+Result
+{
+    [
+        {
+            "start_time": start_time_of_shift_1_in_specified_range,
+            "end_time": end_time_of_shift_1_in_specified_range,
+            "percentage_overpour": 100,
+            "overpouring_count": 3
+        },
+        {
+            shift_2_here ...
+        }
+    ]
 }
 
 if HTTP STATUS != 200, fail to delete bartender

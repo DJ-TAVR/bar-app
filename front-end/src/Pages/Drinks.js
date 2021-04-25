@@ -34,21 +34,15 @@ const useStyles = makeStyles({
 export default function Drinks(props) {
 
     const classes = useStyles();
+    const [startDate, setStartDate] = React.useState("2021-03-15 02:00:00");
+    const [endDate, setEndDate] = React.useState("2021-04-25 08:00:00");
     const [showTable, setShowTable] = React.useState(false);
-    const [chartData, setChartData] = React.useState({
-        low_stock: "",
-        toal_revenue: 0,
-        most_overpoured:[],
-        percent_revenue: [] });
-    const [tableData, setTableData] = React.useState([createData('adsf889', "Tanqueray", "Gin", 2, 100)]);
+    const [overpoured, setOverpoured] = React.useState([]);
+    const [revenue, setRevenue] = React.useState([]);
+    const [lowest, setLowest] = React.useState("");
+    const [tableData, setTableData] = React.useState([]);
     let brandsOverpour = [];
     let topOverpours = [];
-    let brandsRevenue = [];
-    let topRevenue = [];
-
-    function createData(key, brand, type, revenue, stock) {
-      return {key, brand, type, revenue, stock};
-    }
 
     function getCookie(name) {
         let cookieValue = null;
@@ -66,75 +60,93 @@ export default function Drinks(props) {
         return cookieValue;
     }
 
-    // Temp until API call
-    function updateChartData() {
-      setChartData({
-        low_stock: "Miller Lite",
-        toal_revenue: 850,
-        most_overpoured:[{
-            brand: "Miller Lite",
-            amount_overpoured: 5
-          }, {
-            brand: "Tanqueray",
-            amount_overpoured: 2
-          }, {
-            brand: "Poopy",
-            amount_overpoured: 2
-          }, {
-            brand: "Jim Beam",
-            amount_overpoured: 1
-          }, {
-            brand: "Captain Morgan",
-            amount_overpoured: 1
-        }],
-        percent_revenue: [{
-            brand: "Miller Lite",
-            percent: 50
-          }, {
-            brand: "Tanqueray",
-            percent: 25
-          }, {
-            brand: "Poopy",
-            percent: 10
-          }, {
-            brand: "Jim Beam",
-            percent: 5
-          }, {
-            brand: "Captain Morgan",
-            percent: 2
-          }, {
-            brand: "Other",
-            percent: 3
-        }]
-      });
+    function handleStartDate(e){
+      var dateVal = e.target.value.replaceAll("T", " ");
+      dateVal = dateVal + ":00";
+      setStartDate(dateVal);
     }
 
-    // Temp until API call
+    function handleEndDate(e){
+      var dateVal = e.target.value.replaceAll("T", " ");
+      dateVal = dateVal + ":00";
+      setEndDate(dateVal);
+    }
+
+    function updateOverpoured() {
+      let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/sticker/overpoured_drinks/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body:  JSON.stringify({
+              start_time: startDate, 
+              end_time:   endDate
+            })
+        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => setOverpoured(obj.body));
+    }
+
+    function updateRevenue() {
+      let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/sticker/revenue_results/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf ,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body:  JSON.stringify({
+              start_time: startDate, 
+              end_time:   endDate
+            })
+        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => setRevenue(obj.body));
+    }
+
+    function updateLowest() {
+      let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/inventory/get_drink_lowest_stock/", {
+            headers: {
+                "X-CSRFToken": csrf ,
+            },
+            credentials: "include"
+        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => setLowest(obj.body[0].name));
+    }
+
     function updateTableData() {
-      setTableData([
-        createData('adsf889', "Tanqueray", "Gin", 2, 100),
-        createData('qwerty123', 'Miller Lite', 'Beer', 3, 200),
-        createData('wowow', 'Poopy', 'Beer', 3, 150),
-        createData('taipdsd', 'Captain Morgan', 'Rum', 1, 250),
-        createData('naiknaik', 'Jim Beam', 'Whiskey', 1, 150)
-      ]);
+      let csrf = getCookie('csrftoken');
+        fetch("http://localhost:8000/inventory/get_drinks/", {
+            headers: {
+                "X-CSRFToken": csrf ,
+            },
+            credentials: "include"
+        }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+        .then(obj => setTableData(obj.body));
+    }
+
+    function toggle(){
+      setShowTable(!showTable);
+    }
+
+    function updateChartData() {
+      updateOverpoured();
+      updateRevenue();
+      updateLowest();
+      updateTableData();
     }
 
     useEffect(() => {
-        updateChartData();
+      updateChartData();
     }, []);
 
-    useEffect(() => {
-      updateTableData();
-    }, []);
-
-    for (let data of chartData.most_overpoured) {
+    let tempOverpoured = []; // Temp until API works correctly
+    for (let data of tempOverpoured) {
       brandsOverpour.push(data.brand);
       topOverpours.push(data.amount_overpoured);
-    }
-    for (let data of chartData.percent_revenue) {
-      brandsRevenue.push(data.brand);
-      topRevenue.push(data.percent);
     }
 
     let overpourBar = {
@@ -148,17 +160,6 @@ export default function Drinks(props) {
           data: topOverpours,
           backgroundColor: "rgba(133,77,255,255)"
         }
-      ]
-    }
-
-    let revenuePercent = {
-      labels: brandsRevenue,
-      datasets: [
-          {
-            data: topRevenue,
-            backgroundColor: ["rgba(46,226,157,255)", "rgba(0,177,233,255)", "rgba(26,96,251,255)",
-                              "rgba(116,70,216,255)", "rgba(76,44,108,255)", "rgba(41,103,104,255)"]
-          }
       ]
     }
 
@@ -180,6 +181,7 @@ export default function Drinks(props) {
                       id="datetime-local"
                       label="Start Date"
                       type="datetime-local"
+                      onChange = {(e) => handleStartDate(e)}
                       InputLabelProps = {{
                         shrink: true,
                         className: classes.input
@@ -194,6 +196,7 @@ export default function Drinks(props) {
                       id="datetime-local"
                       label="End Date"
                       type="datetime-local"
+                      onChange = {(e) => handleEndDate(e)}
                       InputLabelProps = {{
                         shrink: true,
                         className: classes.input
@@ -201,12 +204,13 @@ export default function Drinks(props) {
                       InputProps={{
                         className: classes.input,
                       }}/>
+                    <Button className = "spaceLeft" onClick = {updateChartData}>Confirm Dates</Button>
                   </div>
                 </div>
               </form>
             </div>
             <br/>
-            <div className="Grid">
+            <div className="Grid2">
               <Bar
                 className ="Chart"
                 data={overpourBar}
@@ -228,31 +232,21 @@ export default function Drinks(props) {
                     }]
                   }
               }}/>
-              <Doughnut
-                className ="Chart"
-                data={revenuePercent}
-                options={{
-                  title:{
-                    display:true,
-                    text: "Percentage of Revenue",
-                    fontSize:20,
-                    },
-                  animation: {
-                    animateScale: true,
-                    animateRotate: true
-                    }
-              }}/>
               <div className="Statistic">
-                <p className="StatHeader">Low Stock Alert!</p>
-                <p className="StatElement" style={{color: "#c954ff"}}>{chartData.low_stock}</p>
+                <p className="StatHeadTop">Low Stock Alert!</p>
+                <p className="StatElmTop" style={{color: "#c954ff"}}>{lowest}</p>
               </div>
               <div className="Statistic">
                 <p className="StatHeader">Total Revenue</p>
-                <p className="StatElement" style={{color: "#2ee29d"}}>{ "$" + chartData.toal_revenue}</p>
+                <p className="StatElement" style={{color: "#2ee29d"}}>{revenue.valueOfDrinksPoured}</p>
+              </div>
+              <div className="Statistic">
+                <p className="StatHeader">Lost Revenue</p>
+                <p className="StatElement" style={{color: "#2ee29d"}}>{revenue.totalLostRevenue}</p>
               </div>
               <p/>
             </div>
-            <Button onClick = {toggle}>Switch to Drink Table</Button>
+            <Button className = "up" onClick= {toggle}>Switch to Drink Table</Button>
           </div>
         </div>
       ) || showTable && (
@@ -262,59 +256,27 @@ export default function Drinks(props) {
             <h1 className = "Table_Text"> Inventory Insights </h1>
             <br/>
             <div class = "tableDiv">
-              <div>
-                <form>
-                  <div class = "realRow">
-                    <div class = "spaceRight">
-                      <TextField
-                        defaultValue = "YYYY-MM-DD"
-                        id="datetime-local"
-                        label="Start Date"
-                        type="datetime-local"
-                        InputLabelProps = {{
-                          shrink: true,
-                          className: classes.input
-                        }}
-                        InputProps={{
-                          className: classes.input,
-                        }}/>
-                    </div>
-                    <div>
-                      <TextField
-                        defaultValue = "YYYY-MM-DD"
-                        id="datetime-local"
-                        label="End Date"
-                        type="datetime-local"
-                        InputLabelProps = {{
-                          shrink: true,
-                          className: classes.input
-                        }}
-                        InputProps={{
-                          className: classes.input,
-                        }}/>
-                    </div>
-                  </div>
-                </form>
-              </div>
               <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="right">Unique Key</TableCell>
                       <TableCell align = "right">Brand</TableCell>
                       <TableCell align = "right">Type</TableCell>
+                      <TableCell align = "right">Size</TableCell>
+                      <TableCell align = "right">Price</TableCell>
+                      <TableCell align="right">Quantity</TableCell>
                       <TableCell align="right">Revenue</TableCell>
-                      <TableCell align="right">Bottles Left</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {tableData.map((row) => (
                       <TableRow key={row.name}>
-                        <TableCell align="right">{row.key}</TableCell>
-                        <TableCell align="right">{row.brand}</TableCell>
+                        <TableCell align="right">{row.name}</TableCell>
                         <TableCell align="right">{row.type}</TableCell>
+                        <TableCell align="right">{row.size}</TableCell>
+                        <TableCell align="right">{row.price}</TableCell>
+                        <TableCell align="right">{row.quantity}</TableCell>
                         <TableCell align="right">{row.revenue}</TableCell>
-                        <TableCell align="right">{row.stock}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -327,8 +289,4 @@ export default function Drinks(props) {
       </div>
     ))
     )
-
-    function toggle(){
-        setShowTable(!showTable);
-    }
 }
