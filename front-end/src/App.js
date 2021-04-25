@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import Bartender  from './Pages/Bartender';
 import Drinks from './Pages/Drinks';
+import AddSticker from './Pages/AddSticker';
 
 function App() {
   const [userType, setUserType] = React.useState("user");
@@ -65,6 +66,9 @@ function App() {
       </Route>
       <Route path = "/help">
         <Help isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} />
+      </Route>
+      <Route path = "/stickerReg">
+        <AddSticker isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken}/>
       </Route>
       <Route >
         <Login isAuth = {isAuth} setIsAuth = {setIsAuth} csrfToken = {csrfToken} setCSRFToken = {setCSRFToken} userType = {userType} handleUserType = {handleUserType}/>

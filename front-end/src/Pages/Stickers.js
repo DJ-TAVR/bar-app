@@ -9,6 +9,11 @@ import CustomSidebar from "../Components/CustomSidebar"
 var selector = 0;
 
 export default function Stickers(props) {
+
+    useEffect(() => {
+        updateTable();
+    }, []);
+
     const [data, setData] = React.useState([]);
 
     const columns = React.useMemo(() => [{
@@ -108,30 +113,6 @@ export default function Stickers(props) {
         .then(obj => setData(obj.body));
     }
 
-    function addSticker() {
-        let csrf = getCookie('csrftoken');
-        fetch("http://localhost:8000/sticker/create/", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": csrf ,
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                sticker_id: (Math.floor(Math.random() * 100) + 1).toString(),
-                drink_name: "test",
-                drink_type: "lemon",
-                drink_size: "12",
-                price: "3.50"
-            })
-        })
-        .then((res) => {
-            console.log(res)
-        }).then(() =>{
-            updateTable();
-        })
-    }
-
     function removeSticker() {
         let csrf = getCookie('csrftoken');
         let lastRow = document.getElementById("stickers").rows;
@@ -210,7 +191,9 @@ export default function Stickers(props) {
             </div>
             <Button className = "button managerButton" id="submitChanges" onClick={submit}>Submit</Button>
             {/* Demonstration Commands */}
-            <Button onClick={addSticker}>Add Sticker to Bar</Button>
+            <Link to = "/stickerReg">
+            <Button>Add Sticker to Bar</Button>
+            </Link>
             <br/>
             <Button onClick={removeSticker}>Remove Sticker from Bar</Button>
         </div>
