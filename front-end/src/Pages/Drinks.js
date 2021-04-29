@@ -34,15 +34,13 @@ const useStyles = makeStyles({
 export default function Drinks(props) {
 
     const classes = useStyles();
-    const [startDate, setStartDate] = React.useState("2021-03-15 02:00:00");
-    const [endDate, setEndDate] = React.useState("2021-04-25 08:00:00");
+    const [startDate, setStartDate] = React.useState("2021-04-28 23:00:28.156412+00:00");
+    const [endDate, setEndDate] = React.useState("2021-04-28 23:46:46.918957+00:00");
     const [showTable, setShowTable] = React.useState(false);
     const [overpoured, setOverpoured] = React.useState([]);
     const [revenue, setRevenue] = React.useState([]);
     const [lowest, setLowest] = React.useState("");
     const [tableData, setTableData] = React.useState([]);
-    let brandsOverpour = [];
-    let topOverpours = [];
 
     function getCookie(name) {
         let cookieValue = null;
@@ -83,7 +81,7 @@ export default function Drinks(props) {
             credentials: "include",
             body:  JSON.stringify({
               start_time: startDate, 
-              end_time:   endDate
+              end_time: endDate
             })
         }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
         .then(obj => setOverpoured(obj.body));
@@ -100,7 +98,7 @@ export default function Drinks(props) {
             credentials: "include",
             body:  JSON.stringify({
               start_time: startDate, 
-              end_time:   endDate
+              end_time: endDate
             })
         }).then(r =>  r.json().then(data => ({status: r.status, body: data})))
         .then(obj => setRevenue(obj.body));
@@ -143,21 +141,16 @@ export default function Drinks(props) {
       updateChartData();
     }, []);
 
-    let tempOverpoured = []; // Temp until API works correctly
-    for (let data of tempOverpoured) {
-      brandsOverpour.push(data.brand);
-      topOverpours.push(data.amount_overpoured);
-    }
-
+    
     let overpourBar = {
-      labels: brandsOverpour,
+      labels: Object.keys(overpoured),
       datasets: [
         {
           label: 'Number of Overpouring Instances',
           backgroundColor: 'rgba(75,192,192,1)',
           borderColor: 'rgba(0,0,0,1)',
           borderWidth: 2,
-          data: topOverpours,
+          data: Object.values(overpoured),
           backgroundColor: "rgba(133,77,255,255)"
         }
       ]
@@ -246,7 +239,7 @@ export default function Drinks(props) {
               </div>
               <p/>
             </div>
-            <Button className = "up" onClick= {toggle}>Switch to Drink Table</Button>
+            <Button className = "SwapButton" onClick= {toggle}>Switch to Drink Table</Button>
           </div>
         </div>
       ) || showTable && (

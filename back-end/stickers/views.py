@@ -274,20 +274,20 @@ def get_five_most_overpoured_drinks_view(request):
                     if obj.sticker.drink.name not in uniqueDrinks:
                         if (obj.volume_poured - obj.sticker.target > 0):
                             targetType = type(obj.sticker.target)
-                            if (targetType == float or targetType == int or targetType == complex):
+                            try:
                                 uniqueDrinks[obj.sticker.drink.name] = float(obj.volume_poured - obj.sticker.target)
-                            else:
+                            except:
                                 uniqueDrinks[obj.sticker.drink.name] = 0
                         else:
                             uniqueDrinks[obj.sticker.drink.name] = 0
                     else:
                         targetType = type(obj.sticker.target)
-                        if (targetType == float or targetType == int or targetType == complex):
+                        try:
                             if (obj.volume_poured - obj.sticker.target > 0):
                                 uniqueDrinks[obj.sticker.drink.name] += float(obj.volume_poured - obj.sticker.target)
                             else:
                                 uniqueDrinks[obj.sticker.drink.name] += 0
-                        else:
+                        except:
                             uniqueDrinks[obj.sticker.drink.name] += 0
                 
                 K = len(uniqueDrinks)

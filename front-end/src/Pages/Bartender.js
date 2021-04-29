@@ -48,43 +48,12 @@ export default function Bartender(props) {
     const [endDate, setEndDate] = React.useState("2021-03-22 08:00:00")
     const [showTable, setShowTable] = React.useState(false)
     const [chartData, setChartData] = React.useState({
-        average_mlpp:5,
+        average_mlpp:0,
         cumulative_mlpp:0,
-        top3_MLPP:[{
-            start_time: "2021/11/15 5:00:00",
-            end_time: "2021/11/15 9:00:00",
-            percentage_overpour: 5
-        },
-        {
-            start_time: "2021/11/15 9:00:00",
-            end_time: "2021/11/15 10:00:00",
-            percentage_overpour: 2
-        },
-        {
-            start_time: "2021/12/15 5:00:00",
-            end_time: "2021/12/15 9:00:00",
-            percentage_overpour: 1
-        }],
-        over_pouring_percentage: 5 });
+        top3_MLPP:[],
+        over_pouring_percentage: 0 });
 
     const [tableData, setTableData] = React.useState([]);
-
-    const columns = React.useMemo(() => [{
-        Header: "Shift Start",
-        accessor: "startTime"
-    }, {
-        Header: "Shift End",
-        accessor: "endTime"
-    }, {
-        Header: "Bartenders Present",
-        accessor: "bartenders",
-    }, {
-        Header: "Liters Overpoured",
-        accessor: "liters",
-    }, {
-        Header: "Amount of Overpouring Instances",
-        accessor: "instances",
-    }], []);
 
     let timeRanges = [];
     let topOverpours = [];
@@ -167,6 +136,7 @@ export default function Bartender(props) {
         });
     }
 
+    // Temp until API works
     function updateTableData() {
         setTableData([
             {
@@ -194,9 +164,6 @@ export default function Bartender(props) {
 
     useEffect(() => {
         updateChartData();
-    }, []);
-
-    useEffect(() => {
         updateTableData();
     }, []);
 
@@ -365,7 +332,7 @@ export default function Bartender(props) {
           <TableRow>
             <TableCell align = "center">Shift Start</TableCell>
             <TableCell align = "center">Shift End</TableCell>
-            <TableCell align="right">Bartenders Present(g)</TableCell>
+            <TableCell align="right">Bartenders Present</TableCell>
             <TableCell align="right">Liters Overpoured</TableCell>
             <TableCell align="right"># Overpouring Instances</TableCell>
           </TableRow>
